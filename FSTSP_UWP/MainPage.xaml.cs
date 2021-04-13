@@ -22,18 +22,69 @@ namespace FSTSP_UWP
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        private readonly List<(string Tag, Type Page)> _pages = new List<(string Tag, Type Page)>
+        {
+            ("home", typeof(HomePage)),
+            ("settings", typeof(SettingsPage))
+        };
+
         public MainPage()
         {
             this.InitializeComponent();
         }
 
-        private void RunFstsp(object sender, RoutedEventArgs e)
+        private void NavView_Loaded(object sender, RoutedEventArgs e)
         {
-            progressRing.IsActive = !progressRing.IsActive;
+            ContentFrame.Navigated += OnNavigated;
+            NavView.SelectedItem = NavView.MenuItems[0];
+            NavViewNavigate("home", new Windows.UI.Xaml.Media.Animation.EntranceNavigationTransitionInfo());
         }
 
-        private void RunTsp(object sender, RoutedEventArgs e)
+        private void OnNavigated(object sender, NavigationEventArgs e)
         {
-            outputPanel.Text = $"{outputPanel.Text}\nnew lint";        }
+            NavView.IsBackEnabled = ContentFrame.CanGoBack;
+
+            if(ContentFrame.SourcePageType == typeof(HomePage))
+            {
+                NavView.SelectedItem = (NavigationViewItem)NavView.SettingsItem;
+            }
+            
+        }
+
+        private void NavViewNavigate(string pageTag, Windows.UI.Xaml.Media.Animation.NavigationTransitionInfo transitionInfo)
+        {
+            Type _page = null;
+            if (pageTag == "home")
+            {
+                _page = typeof(HomePage);
+            } else if (pageTag == "settings") {
+                _page = typeof(SettingsPage);
+            }
+            var preNavPageType = ContentFrame.CurrentSourcePageType;
+            if (!(_page is null) && !Type.Equals(preNavPageType, _page) ){
+                ContentFrame.Navigate(_page, null, transitionInfo);
+            }
+        }
+
+        private void NavView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
+        {
+            if (args.IsSettingsInvoked == true)
+            {
+                NavViewNavigate("settings", args.RecommendedNavigationTransitionInfo);
+            }
+            else if (args.InvokedItemContainer != null)
+            {
+                var navItemTag = args.InvokedItemContainer.Tag.ToString();
+                NavViewNavigate(navItemTag, args.RecommendedNavigationTransitionInfo);
+            }
+        }
+
+        private void NavItem_BackRequest(NavigationView sender, NavigationViewBackRequestedEventArgs args)
+        {
+            if (!ContentFrame.CanGoBack) return;
+
+            ContentFrame.GoBack();
+        }
+
     }
 }
