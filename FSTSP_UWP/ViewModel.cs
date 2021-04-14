@@ -19,6 +19,8 @@ namespace FSTSP_UWP
         public static int DroneTime = 28800;
         public static int TruckTime = 28800;
 
+        public int AreaSize = 0;
+
         public string runTSP(string areaSizeInput, string numberOfCustomers)
         {
             var areaSize = Int16.Parse(areaSizeInput) * 1000 / BaseConstants.PolygonSize; //sets size in nodes
@@ -50,7 +52,7 @@ namespace FSTSP_UWP
             //doTruck(truckOrders.ToList());
         }
 
-        private string generateSpace(int areaSize)
+        public string generateSpace(int areaSize)
         {
             grid = new SquareGrid(areaSize, areaSize, BaseConstants.areaHeight);
             GridGeneration.fillGrid(grid, areaSize, BaseConstants.areaHeight);
@@ -61,14 +63,14 @@ namespace FSTSP_UWP
             return $"Space of {areaSize * BaseConstants.PolygonSize / 1000} km2 ({areaSize * areaSize * BaseConstants.areaHeight} polygons) generated successfully\n";
         }
 
-        private string generateSpace(int areaSize, int areaHeight)
+        public string generateSpace(int areaSize, int areaHeight)
         {
             grid = new SquareGrid(areaSize, areaSize, areaHeight);
             GridGeneration.fillGrid(grid, areaSize, areaHeight);
             return $"Space of {areaSize * BaseConstants.PolygonSize / 1000} km2 ({areaSize * areaSize} polygons) generated successfully\n";
         }
 
-        private static List<Order> generateOrders(int areaSize, string numberOfCustomers)
+        public static List<Order> generateOrders(int areaSize, string numberOfCustomers)
         {
             List<Order> orders = new List<Order>();
 
@@ -82,7 +84,7 @@ namespace FSTSP_UWP
             return orders;
         }
 
-        private static Truck generateTruck(string truckID, int numberOfDrones, int areaSize)
+        public static Truck generateTruck(string truckID, int numberOfDrones, int areaSize)
         {
             var areaLength = areaSize * 1000;
 

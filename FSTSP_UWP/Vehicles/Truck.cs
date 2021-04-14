@@ -19,7 +19,7 @@ namespace FSTSP_UWP
             destination = new Location(-1, -1, -1);
             time = 28800;
             fulfilledOrders = new List<Order>();
-            log = string.Empty;
+            //log = string.Empty;
         }
 
         public static void doTruckDelivery(SquareGrid grid, Truck truck, Location start, Location deliveryLocation)
@@ -31,7 +31,7 @@ namespace FSTSP_UWP
 
             truck.time += deliveryTime;
             truck.status = Status.Ready;
-            truck.log += $"\nTruck finished delivery to {deliveryLocation} at {deliveryTime.ToString(@"hh\:mm\:ss\")}";
+            //truck.log += $"\nTruck finished delivery to {deliveryLocation} at {deliveryTime.ToString(@"hh\:mm\:ss\")}";
             
             truck.currentPosition = deliveryLocation;
             var availableDrones = truck.drones.Where(x => x.status.Equals(Status.Available)).ToList();

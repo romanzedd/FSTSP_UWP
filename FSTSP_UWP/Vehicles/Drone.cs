@@ -21,7 +21,7 @@ namespace FSTSP_UWP
             destination = new Location(-1, -1, -1);
             time = 28800;
             fulfilledOrders = new List<Order>();
-            log = string.Empty;
+            //log = string.Empty;
         }
 
         public static void loadDrones(Truck truck, Drone drone)
@@ -51,7 +51,7 @@ namespace FSTSP_UWP
             var deliveryTime = pathLength / BaseConstants.DroneSpeed + BaseConstants.DropDeliveryTime;
             routeSheet.drone.currentPosition = routeSheet.deliveryPoint;
             routeSheet.drone.time += deliveryTime;
-            routeSheet.drone.log += $"\nDrone finished delivery to {routeSheet.deliveryPoint} at {deliveryTime.ToString(@"hh\:mm\:ss\")}";
+            //routeSheet.drone.log += $"\nDrone finished delivery to {routeSheet.deliveryPoint} at {deliveryTime.ToString(@"hh\:mm\:ss\")}";
 
             path.Clear();
             path.AddRange(simpleRoute(grid, routeSheet.deliveryPoint, routeSheet.meetingPoint));
@@ -59,7 +59,7 @@ namespace FSTSP_UWP
             deliveryTime = pathLength / BaseConstants.DroneSpeed;
             routeSheet.drone.currentPosition = routeSheet.meetingPoint;
             routeSheet.drone.time += deliveryTime;
-            routeSheet.drone.log += $"\nDrone arrived to meeting point: {routeSheet.deliveryPoint} at {deliveryTime.ToString(@"hh\:mm\:ss\")}";
+            //routeSheet.drone.log += $"\nDrone arrived to meeting point: {routeSheet.deliveryPoint} at {deliveryTime.ToString(@"hh\:mm\:ss\")}";
             routeSheet.drone.status = Status.Awaitng;
 
 

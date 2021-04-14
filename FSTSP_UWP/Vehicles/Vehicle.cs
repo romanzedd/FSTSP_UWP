@@ -14,7 +14,8 @@ namespace FSTSP_UWP
         public Location destination = new Location(-1, -1, -1);
         public int time = 28800;
         public List<Order> fulfilledOrders = new List<Order>();
-        public string log = string.Empty;
+        //public string log = string.Empty;
+        public List<Log> log = new List<Log>();
 
         
         public static void compareAndUpdateTime(List<Drone> drones, Truck truck)
@@ -37,7 +38,8 @@ namespace FSTSP_UWP
         }
         public static void updateTime(Vehicle targetVehicle, int actualTime)
         {
-            targetVehicle.log += $"\n-Waited for {(actualTime - targetVehicle.time).ToString(@"hh\:mm\:ss\")}";
+            targetVehicle.log.Add(new Log(targetVehicle.GetType().ToString(), targetVehicle.currentPosition, "blank-address", actualTime, targetVehicle.status, "success"));
+                //+= $"\n-Waited for {(actualTime - targetVehicle.time).ToString(@"hh\:mm\:ss\")}";
             targetVehicle.time = actualTime;
         }
 
