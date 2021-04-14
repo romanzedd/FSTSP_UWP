@@ -22,6 +22,8 @@ namespace FSTSP_UWP
     /// </summary>
     public sealed partial class HomePage : Page
     {
+        ViewModel viewModel = new ViewModel();
+
         public HomePage()
         {
             this.InitializeComponent();
@@ -30,6 +32,8 @@ namespace FSTSP_UWP
         private void RunFstsp(object sender, RoutedEventArgs e)
         {
             progressRing.IsActive = !progressRing.IsActive;
+
+            viewModel.generateSpace((int)this.areaSize.Value);
         }
 
         private void RunTsp(object sender, RoutedEventArgs e)

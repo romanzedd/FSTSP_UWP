@@ -5,10 +5,85 @@
     xmlns:local="using:FSTSP_UWP"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:winui="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
+    <ScrollViewer Padding="15" MaxWidth="700">
+        <StackPanel Orientation="Vertical">
+            <Grid >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions >
+                    <RowDefinition MinHeight="50" />
+                    <RowDefinition MinHeight="40" />
+                    <RowDefinition MinHeight="40" />
+                    <RowDefinition MinHeight="50" />
+                    <RowDefinition MinHeight="40" />
+                    <RowDefinition MinHeight="40" />
+                    <RowDefinition MinHeight="40" />
+                    <RowDefinition MinHeight="40" />
+                    <RowDefinition MinHeight="40" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Grid.ColumnSpan="2" FontSize="28" FontWeight="Bold" Padding="20 20 0 0">General</TextBlock>
+                
+                <TextBlock VerticalAlignment="Center" Grid.Row="1" >Traffic:</TextBlock>
+                <Slider x:Name="traffic" Grid.Row="1" Grid.Column="1" Minimum="0" Maximum="10" SmallChange="1"></Slider>
 
-    </Grid>
+                <TextBlock VerticalAlignment="Center" Grid.Row="2" >Delivery intervals:</TextBlock>
+                <CheckBox x:Name="deliveryInterval" Grid.Row="2" Grid.Column="1" ></CheckBox>
+
+                <TextBlock Grid.Row="3" Grid.ColumnSpan="2" FontSize="28" FontWeight="Bold" Padding="20 20 0 0">Weather</TextBlock>
+
+                <TextBlock VerticalAlignment="Center" Grid.Row="4" >Temperature:</TextBlock>
+                <Grid VerticalAlignment="Center"  Grid.Row="4" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <winui:NumberBox x:Name="temperature" Grid.Column="0" SmallChange="2" Minimum="-50" Maximum="100" SpinButtonPlacementMode="Inline" Value="0"></winui:NumberBox>
+                    <TextBlock Grid.Column="1" VerticalAlignment="Center" HorizontalTextAlignment="Right" Padding="5 0 5 0" MinWidth="30" >°C</TextBlock>
+                </Grid>
+
+                <TextBlock VerticalAlignment="Center" Grid.Row="5" >Percipitation:</TextBlock>
+                <Grid VerticalAlignment="Center"  Grid.Row="5" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <winui:NumberBox x:Name="percipitation" Grid.Column="0" SmallChange="5" Minimum="0" Maximum="100" SpinButtonPlacementMode="Inline" Value="0" ></winui:NumberBox>
+                    <TextBlock Grid.Column="1" VerticalAlignment="Center"  HorizontalTextAlignment="Right" Padding="5 0 5 0" MinWidth="30">%</TextBlock>
+                </Grid>
+
+                <TextBlock VerticalAlignment="Center" Grid.Row="6">Percipitation type:</TextBlock>
+                <ComboBox x:Name="percipitationType" Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="0 0 30 0">
+                    <x:String>Showers</x:String>
+                    <x:String>Snowfall</x:String>
+                    <x:String>Hail</x:String>
+                </ComboBox>
+
+                <TextBlock VerticalAlignment="Center" Grid.Row="7" >Wind:</TextBlock>
+                <Grid VerticalAlignment="Center"  Grid.Row="7" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <winui:NumberBox x:Name="wind" Grid.Column="0" SmallChange="1" Minimum="0" Maximum="35" SpinButtonPlacementMode="Inline" Value="0" ></winui:NumberBox>
+                    <TextBlock Grid.Column="1" VerticalAlignment="Center"  HorizontalTextAlignment="Right" Padding="5 0 0 0" MinWidth="30">m/s</TextBlock>
+                </Grid>
+
+                <TextBlock VerticalAlignment="Center"  Grid.Row="8" >Geomagnetic activity index:</TextBlock>
+                <winui:NumberBox x:Name="geoIndex" Grid.Column="1"  Grid.Row="8" VerticalAlignment="Center" SmallChange="1" SpinButtonPlacementMode="Inline" Value="0" Margin="0 0 30 0" ></winui:NumberBox>
+
+                <StackPanel Grid.Row="9" Grid.ColumnSpan="2" HorizontalAlignment="Right" Margin="0 15 30 0">
+                    <Button MinWidth="80" Click="SaveSettings" >Save</Button>
+                </StackPanel>
+
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+    
 </Page>

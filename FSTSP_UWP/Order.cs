@@ -12,13 +12,38 @@ namespace FSTSP_UWP
         public int y;
         public int weight;
         public bool isDroneFriendly;
+        public string address;
+        public int dueTime;
 
-        public Order(int X, int Y, bool droneFriendly, int Weight)
+        private string[] streetNames = {"Красный проспект",
+                                        "Горького",
+                                        "1905 года",
+                                        "9 марта",
+                                        "Советская",
+                                        "Вокзальная магистраль",
+                                        "Кирова",
+                                        "Восход",
+                                        "Бориса Богаткова",
+                                        "Дуси Ковальчук",
+                                        "Ватутина",
+                                        "Титова",
+                                        "Немировича Данченко",
+                                        "Геодезическая",
+                                        "Новогодняя",
+                                        "Ленина"};
+
+        public Order(int X, int Y, bool droneFriendly, int Weight, int dueTime = 0)
         {
             x = X;
             y = Y;
             isDroneFriendly = droneFriendly;
             weight = Weight;
+            if (dueTime != 0) this.dueTime = dueTime;
+
+            Random rnd = new Random();
+            var street = streetNames[rnd.Next(streetNames.Length)];
+            var building = rnd.Next(150);
+            address = street + " - " + building.ToString(); 
         }
 
         public static List<Order> generateOrders(SquareGrid grid, Location Depot, int ordersCount, int areaSize)

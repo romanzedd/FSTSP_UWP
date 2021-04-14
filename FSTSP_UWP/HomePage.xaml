@@ -9,16 +9,15 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <StackPanel HorizontalAlignment="Center">
-            <TextBlock FontSize="28" HorizontalAlignment="Center">THIS IS APP TITLE</TextBlock>
-            <Grid Margin="5 10">
+        <Grid Margin="5 10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <StackPanel  Grid.Column="0" Orientation="Horizontal" Margin="10 0">
                     <TextBlock VerticalAlignment="Center" Padding="0 0 5 0">Area</TextBlock>
-                <winui:NumberBox SmallChange="1" Minimum="0" Maximum="10" SpinButtonPlacementMode="Inline" Value="0"></winui:NumberBox>
-                <TextBlock VerticalAlignment="Center" Padding="0 0 5 0">км2</TextBlock>
+                <winui:NumberBox x:Name="areaSize" SmallChange="1" Minimum="0" Maximum="10" SpinButtonPlacementMode="Inline" Value="0"></winui:NumberBox>
+                <TextBlock VerticalAlignment="Center" Padding="2 0 5 0">km2</TextBlock>
 
             </StackPanel>
                 <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="10 0">
@@ -33,7 +32,7 @@
             </StackPanel>
             <StackPanel Orientation="Vertical" >
                 <ProgressRing x:Name="progressRing" IsActive="True" Width="60" Height="60" Margin="0 10" />
-                <Grid Background="#222">
+            <Grid Background="{ThemeResource ButtonBackgroundPointerOver}">
                     <ScrollViewer VerticalScrollMode="Enabled"  MinHeight="400" MaxHeight="600" VerticalScrollBarVisibility="Visible">
                         <TextBlock x:Name="outputPanel" Padding="15" TextTrimming="CharacterEllipsis">
                         this it the test output os the program

@@ -120,6 +120,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="BaseConstants.cs" />
+    <Compile Include="SettingsKeys.cs" />
     <Compile Include="FSTSPRouting.cs" />
     <Compile Include="GridGeneration.cs" />
     <Compile Include="HomePage.xaml.cs">
