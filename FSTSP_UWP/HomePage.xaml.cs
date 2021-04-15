@@ -33,7 +33,11 @@ namespace FSTSP_UWP
         {
             progressRing.IsActive = !progressRing.IsActive;
 
-            viewModel.generateSpace((int)this.areaSize.Value);
+            var result = viewModel.generateSpace((int)this.areaSize.Value);
+            this.outputPanel.Text += result;
+
+            result = viewModel.runFSTSP((int)this.areaSize.Value, (int)this.numberOfCustomers.Value);
+            this.outputPanel.Text += "\n" + result;
         }
 
         private void RunTsp(object sender, RoutedEventArgs e)

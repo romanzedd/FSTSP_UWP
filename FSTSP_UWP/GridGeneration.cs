@@ -118,8 +118,8 @@ namespace FSTSP_UWP
             watch.Stop();
             var seconds = watch.ElapsedMilliseconds / 1000;
 
-            saveToXML(grid, "grid.xml");
-            loadFromXML(grid, "grid.xml");
+            //saveToXML(grid, "c:\\FSTSP_Files\\grid.xml");
+            //loadFromXML(grid, "c:\\FSTSP_Files\\grid.xml");
         }
 
         static void defineStreets(List<int> xStreets, List<int> yStreets, int size)

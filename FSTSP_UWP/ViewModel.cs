@@ -13,6 +13,7 @@ namespace FSTSP_UWP
         public Graph[,,] map;
         public static SquareGrid grid;
         public static SquareGrid groundGrid;
+        public static List<Order> orders;
 
         public List<Location> ThePath;
         public static Location Depot;
@@ -21,25 +22,25 @@ namespace FSTSP_UWP
 
         public int AreaSize = 0;
 
-        public string runTSP(string areaSizeInput, string numberOfCustomers)
+        public string runTSP(int areaSize, int numberOfCustomers)
         {
-            var areaSize = Int16.Parse(areaSizeInput) * 1000 / BaseConstants.PolygonSize; //sets size in nodes
+            //var areaSize = Int16.Parse(areaSizeInput) * 1000 / BaseConstants.PolygonSize; //sets size in nodes
             Depot = new Location(areaSize / 2, areaSize / 2, 0);
             generateSpace(areaSize, 1);
             groundGrid = grid;
-            var orders = generateOrders(areaSize, numberOfCustomers);
+            generateOrders(areaSize, numberOfCustomers);
             var result = doTruck(orders);
             return result;
         }
 
-        public string runFSTSP(string areaSizeInput, string numberOfCustomers)
+        public string runFSTSP(int areaSizeInput, int numberOfCustomers)
         {
-            var areaSize = Int16.Parse(areaSizeInput) * 1000 / BaseConstants.PolygonSize; //sets size in nodes
+            var areaSize = areaSizeInput * 1000 / BaseConstants.PolygonSize; //sets size in nodes
             Depot = new Location(areaSize / 2, areaSize / 2, 0);
 
-            var result = generateSpace(areaSize);
+            //var result = generateSpace(areaSize);
 
-            var orders = generateOrders(areaSize, numberOfCustomers);
+            generateOrders(areaSize, numberOfCustomers);
             Order.sortOrders(ref orders, Depot);
             //var truckOrders = orders.Where(x => x.isDroneFriendly == false);
             //var droneOrders = orders.Where(x => x.isDroneFriendly == true);
@@ -52,8 +53,9 @@ namespace FSTSP_UWP
             //doTruck(truckOrders.ToList());
         }
 
-        public string generateSpace(int areaSize)
+        public string generateSpace(int areaSizeInput)
         {
+            var areaSize = areaSizeInput * 1000;
             grid = new SquareGrid(areaSize, areaSize, BaseConstants.areaHeight);
             GridGeneration.fillGrid(grid, areaSize, BaseConstants.areaHeight);
 
@@ -70,18 +72,15 @@ namespace FSTSP_UWP
             return $"Space of {areaSize * BaseConstants.PolygonSize / 1000} km2 ({areaSize * areaSize} polygons) generated successfully\n";
         }
 
-        public static List<Order> generateOrders(int areaSize, string numberOfCustomers)
+        public static string generateOrders(int areaSize, int ordersCount)
         {
-            List<Order> orders = new List<Order>();
+            //List<Order> orders = new List<Order>();
 
-            short ordersCount;
-            if (!Int16.TryParse(numberOfCustomers, out ordersCount))
+            if (ordersCount < 1)
                 ordersCount = 15;
 
             orders = Order.generateOrders(grid, Depot, ordersCount, areaSize);
-            //outputTextBox.Text += $"{ordersCount} orders generated successfully\n";
-
-            return orders;
+            return $"{ordersCount} orders generated successfully\n";
         }
 
         public static Truck generateTruck(string truckID, int numberOfDrones, int areaSize)
