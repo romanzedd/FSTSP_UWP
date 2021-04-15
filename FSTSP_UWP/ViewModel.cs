@@ -22,9 +22,9 @@ namespace FSTSP_UWP
 
         public int AreaSize = 0;
 
-        public string runTSP(int areaSize, int numberOfCustomers)
+        public string runTSP(int areaSizeInput, int numberOfCustomers)
         {
-            //var areaSize = Int16.Parse(areaSizeInput) * 1000 / BaseConstants.PolygonSize; //sets size in nodes
+            var areaSize = areaSizeInput * 1000 / BaseConstants.PolygonSize; //sets size in nodes
             Depot = new Location(areaSize / 2, areaSize / 2, 0);
             generateSpace(areaSize, 1);
             groundGrid = grid;
@@ -47,29 +47,32 @@ namespace FSTSP_UWP
 
             var truck = generateTruck("truck1", 3, areaSize);
             FSTSPRouting.buildUnitRoute(grid, orders, truck);
+            
+            var output = ComposeResult(truck);
 
-            return "\nOK";
+            return output;
             //doDrone(droneOrders.ToList());
             //doTruck(truckOrders.ToList());
         }
 
         public string generateSpace(int areaSizeInput)
         {
-            var areaSize = areaSizeInput * 1000;
+            var areaSize = areaSizeInput * 1000 / BaseConstants.PolygonSize;
             grid = new SquareGrid(areaSize, areaSize, BaseConstants.areaHeight);
             GridGeneration.fillGrid(grid, areaSize, BaseConstants.areaHeight);
 
             groundGrid = new SquareGrid(areaSize, areaSize, 1);
             groundGrid.walls = grid.walls.Where(location => location.z == 0).ToHashSet();
 
-            return $"Space of {areaSize * BaseConstants.PolygonSize / 1000} km2 ({areaSize * areaSize * BaseConstants.areaHeight} polygons) generated successfully\n";
+            return $"Space of {areaSizeInput} km2 ({areaSize * areaSize * BaseConstants.areaHeight} polygons) generated successfully\n";
         }
 
-        public string generateSpace(int areaSize, int areaHeight)
+        public string generateSpace(int areaSizeInput, int areaHeight)
         {
+            var areaSize = areaSizeInput * 1000 / BaseConstants.PolygonSize;
             grid = new SquareGrid(areaSize, areaSize, areaHeight);
             GridGeneration.fillGrid(grid, areaSize, areaHeight);
-            return $"Space of {areaSize * BaseConstants.PolygonSize / 1000} km2 ({areaSize * areaSize} polygons) generated successfully\n";
+            return $"Space of {areaSizeInput} km2 ({areaSize * areaSize * areaHeight} polygons) generated successfully\n";
         }
 
         public static string generateOrders(int areaSize, int ordersCount)
@@ -196,7 +199,26 @@ namespace FSTSP_UWP
             }
             return output;
         }
+    
+        private string ComposeResult(Truck truck)
+        {
+            var result = string.Empty;
+            var log = new List<Log>();
+
+            log.AddRange(truck.log);
+            foreach(var drone in truck.drones)
+            {
+                log.AddRange(drone.log);
+            }
+
+            var sortedLog = log.OrderBy(x => x.time).ToList();
+            foreach(var entry in sortedLog)
+            {
+                result += "\n" + entry.Print();
+            }
+
+            return result;
+        }
 
     }
-
 }

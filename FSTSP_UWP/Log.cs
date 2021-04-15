@@ -11,7 +11,7 @@ namespace FSTSP_UWP
         string vehicleType;
         Location location;
         string locationName;
-        int time;
+        public int time;
         Status vehicleStatus;
         string operationResult;
     
@@ -23,6 +23,18 @@ namespace FSTSP_UWP
             time = Time;
             vehicleStatus = VehicleStatus;
             operationResult = OperationResult;
+        }
+
+        public string Print()
+        {
+            var result = string.Empty;
+            result += $"\nVehicle type: {this.vehicleType}";
+            result += $"\n\tLocation: x = {this.location.x.ToString()}, y = {this.location.y.ToString()}, z = {this.location.z.ToString()} - ";
+            result += $"{locationName}";
+            result += $"\n\tTime: {this.time.ToString("hh':'mm")}";
+            result += $"\n\tVehicle Status: {this.vehicleStatus.ToString()}";
+            result += $"\n\tOperation result: {this.operationResult}";
+            return result;
         }
 
         public static void saveToXML(string filename)

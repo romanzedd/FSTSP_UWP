@@ -31,7 +31,7 @@ namespace FSTSP_UWP
 
             truck.time += deliveryTime;
             truck.status = Status.Ready;
-            //truck.log += $"\nTruck finished delivery to {deliveryLocation} at {deliveryTime.ToString(@"hh\:mm\:ss\")}";
+            truck.log.Add(new Log("truck", truck.currentPosition, "blank-address", truck.time, truck.status,"success"));
             
             truck.currentPosition = deliveryLocation;
             var availableDrones = truck.drones.Where(x => x.status.Equals(Status.Available)).ToList();
