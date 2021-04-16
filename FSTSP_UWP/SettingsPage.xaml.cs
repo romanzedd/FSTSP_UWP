@@ -47,6 +47,14 @@ namespace FSTSP_UWP
             localSettings.Values[SettingsKeys.WindKey] = wind.Value;
             localSettings.Values[SettingsKeys.GeoIndexKey] = geoIndex.Value;
 
+            Settings.TrafficScore = (int)traffic.Value;
+            Settings.DeliveryInterval = (bool)deliveryInterval.IsChecked;
+            Settings.Temperature = (int)temperature.Value;
+            Settings.PrecipitationVolume = (int)percipitation.Value;
+            Settings.PrecipitationType = percipitationType.SelectedValue.ToString();
+            Settings.Wind = (int)wind.Value;
+            Settings.GAIndex = (int)geoIndex.Value;
+
         }
     }
 }

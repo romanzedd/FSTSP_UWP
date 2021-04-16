@@ -38,21 +38,62 @@ namespace FSTSP_UWP
             var areaSize = areaSizeInput * 1000 / BaseConstants.PolygonSize; //sets size in nodes
             Depot = new Location(areaSize / 2, areaSize / 2, 0);
 
-            //var result = generateSpace(areaSize);
-
             generateOrders(areaSize, numberOfCustomers);
-            Order.sortOrders(ref orders, Depot);
-            //var truckOrders = orders.Where(x => x.isDroneFriendly == false);
-            //var droneOrders = orders.Where(x => x.isDroneFriendly == true);
-
             var truck = generateTruck("truck1", 3, areaSize);
-            FSTSPRouting.buildUnitRoute(grid, orders, truck);
+
+            if (!Settings.DeliveryInterval)
+            {
+                Order.sortOrders(ref orders, Depot);
+                FSTSPRouting.buildUnitRoute(grid, orders, truck);
+            }
+            else
+            {
+                var timeClusteredOrders = new List<List<Order>>();
+                var intervals = new DeliveryIntervals();
+                foreach (var interval in intervals.Intervals)
+                {
+                    var ordersInInterval = orders.Where(x => x.dueTime.Equals(interval.Key)).ToList();
+                    timeClusteredOrders.Add(ordersInInterval);
+                }
+                
+                for (int i = 0; i < timeClusteredOrders.Count(); i++)
+                {
+                    if(truck.time < intervals.Intervals.ToArray()[i].Value.start)
+                    {
+                        truck.status = Status.Idle;
+                        truck.log.Add(new Log(truck.id,
+                                              truck.currentPosition,
+                                              orders.Where(x => (x.x == truck.currentPosition.x && x.y == truck.currentPosition.y)).First().address,
+                                              truck.time,
+                                              truck.status,
+                                              "success"));
+                        truck.time = intervals.Intervals.ToArray()[i].Value.start;
+                        truck.status = Status.Ready;
+                        
+                        foreach (var drone in truck.drones)
+                        {
+                            drone.status = Status.Idle;
+                            drone.log.Add(new Log(drone.id,
+                                                  drone.currentPosition,
+                                                  orders.Where(x => (x.x == truck.currentPosition.x && x.y == truck.currentPosition.y)).First().address,
+                                                  drone.time,
+                                                  drone.status,
+                                                  "success"));
+                            drone.time = intervals.Intervals.ToArray()[i].Value.start;
+                            drone.status = Status.Available;
+                        }
+
+                    }
+
+                    var timedOrders = timeClusteredOrders.ElementAt(i);
+                    Order.sortOrders(ref timedOrders, truck.currentPosition);
+                    FSTSPRouting.buildUnitRoute(grid, timedOrders, truck);
+                }
+            }
             
             var output = ComposeResult(truck);
 
             return output;
-            //doDrone(droneOrders.ToList());
-            //doTruck(truckOrders.ToList());
         }
 
         public async Task<string> generateSpace(int areaSizeInput)
@@ -82,12 +123,10 @@ namespace FSTSP_UWP
 
         public static string generateOrders(int areaSize, int ordersCount)
         {
-            //List<Order> orders = new List<Order>();
-
             if (ordersCount < 1)
                 ordersCount = 15;
 
-            if (SettingsKeys.DeliveryIntervalKey.Equals("True"))
+            if (Settings.DeliveryInterval)
             {
                 orders = Order.generateOrders(grid, Depot, ordersCount, areaSize, true);
             }
@@ -95,7 +134,7 @@ namespace FSTSP_UWP
             {
                 orders = Order.generateOrders(grid, Depot, ordersCount, areaSize);
             }
-            
+
             return $"{ordersCount} orders generated successfully\n";
         }
 

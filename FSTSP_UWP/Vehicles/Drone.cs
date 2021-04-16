@@ -53,7 +53,7 @@ namespace FSTSP_UWP
             routeSheet.drone.time += deliveryTime;
             routeSheet.drone.log.Add(new Log(routeSheet.drone.id, 
                                              routeSheet.drone.currentPosition,
-                                             "base_location",
+                                             ViewModel.orders.Where(x => (x.x == routeSheet.drone.currentPosition.x && x.y == routeSheet.drone.currentPosition.y)).FirstOrDefault()?.address,
                                              routeSheet.drone.time,
                                              routeSheet.drone.status,
                                              "success"));
@@ -64,13 +64,14 @@ namespace FSTSP_UWP
             deliveryTime = pathLength / BaseConstants.DroneSpeed;
             routeSheet.drone.currentPosition = routeSheet.meetingPoint;
             routeSheet.drone.time += deliveryTime;
+            routeSheet.drone.status = Status.Awaitng;
             routeSheet.drone.log.Add(new Log(routeSheet.drone.id,
                                              routeSheet.drone.currentPosition,
-                                             "base_location",
+                                             ViewModel.orders.Where(x => (x.x == routeSheet.drone.currentPosition.x && x.y == routeSheet.drone.currentPosition.y)).FirstOrDefault()?.address,
                                              routeSheet.drone.time,
                                              routeSheet.drone.status,
                                              "success"));
-            routeSheet.drone.status = Status.Awaitng;
+            
 
 
         }

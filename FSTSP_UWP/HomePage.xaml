@@ -9,6 +9,7 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <StackPanel HorizontalAlignment="Center">
+        <TextBlock FontSize="24" Margin="8 16 0 8">Prerequisites</TextBlock>
         <Grid Margin="5 10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -26,12 +27,19 @@
                     <!--<TextBox MinWidth="150" PlaceholderText="Enter number of customers"/>-->
                 </StackPanel>
             </Grid>
-            <StackPanel Margin="0 8" HorizontalAlignment="Center" Orientation="Horizontal">
+        <StackPanel Margin="0 8" HorizontalAlignment="Center" Orientation="Horizontal">
+            <Button  MinWidth="150" Margin="0 0 8 0" Click="SelectFile">Select file</Button>
+            <TextBlock x:Name="fileSelectorTitle" VerticalAlignment="Center">No file selected</TextBlock>
+        </StackPanel>
+        
+        <TextBlock FontSize="24" Margin="8 16 0 8">Run</TextBlock>
+        <StackPanel Margin="0 8" HorizontalAlignment="Center" Orientation="Horizontal">
                 <Button x:Name="runFstspBtn" MinWidth="150" Margin="0 0 8 0" Click="RunFstsp">Run FSTSP</Button>
                 <Button x:Name="runTspBtn" MinWidth="150" Click="RunTsp">Run TSP</Button>
             </StackPanel>
             <StackPanel Orientation="Vertical" >
                 <ProgressRing x:Name="progressRing" IsActive="True" Visibility="Collapsed" Width="60" Height="60" Margin="0 10" />
+            <TextBlock FontSize="24" Margin="8 16 0 8">Logs</TextBlock>
             <Grid Background="{ThemeResource ButtonBackgroundPointerOver}">
                     <ScrollViewer VerticalScrollMode="Enabled"  MinHeight="400" MaxHeight="600" VerticalScrollBarVisibility="Visible">
                         <TextBlock x:Name="outputPanel" Padding="15" TextTrimming="CharacterEllipsis">

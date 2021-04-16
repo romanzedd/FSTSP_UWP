@@ -38,8 +38,12 @@ namespace FSTSP_UWP
         }
         public static void updateTime(Vehicle targetVehicle, int actualTime)
         {
-            targetVehicle.log.Add(new Log(targetVehicle.GetType().ToString(), targetVehicle.currentPosition, "blank-address", actualTime, targetVehicle.status, "success"));
-                //+= $"\n-Waited for {(actualTime - targetVehicle.time).ToString(@"hh\:mm\:ss\")}";
+            targetVehicle.log.Add(new Log(targetVehicle.id,
+                                          targetVehicle.currentPosition,
+                                          ViewModel.orders.Where(x => (x.x == targetVehicle.currentPosition.x && x.y == targetVehicle.currentPosition.y)).FirstOrDefault()?.address,
+                                          actualTime,
+                                          targetVehicle.status,
+                                          "success"));
             targetVehicle.time = actualTime;
         }
 

@@ -9,6 +9,7 @@ namespace FSTSP_UWP
     public enum Status
     {
         Offline,
+        Idle,
         Ready,
         OnMission,
         Awaitng, //at the meeting point

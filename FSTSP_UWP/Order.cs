@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace FSTSP_UWP
 {
-    class DeliveryInterval
+    public class DeliveryInterval
     {
-        int start;
-        int end;
+        public int start;
+        public int end;
 
         public DeliveryInterval(int start, int end)
         {
@@ -18,9 +18,9 @@ namespace FSTSP_UWP
         }
     }
 
-    class DeliveryIntervals
+    public class DeliveryIntervals
     {
-        Dictionary<string, DeliveryInterval> Intervals = new Dictionary<string, DeliveryInterval>();
+        public Dictionary<string, DeliveryInterval> Intervals = new Dictionary<string, DeliveryInterval>();
         
         public DeliveryIntervals()
         {
@@ -31,42 +31,47 @@ namespace FSTSP_UWP
         }
     }
 
+    enum StreetNames
+    {
+        Krasnyi_Prospekt,
+        Lenina,
+        Kuibysheva,
+        Gogolya,
+        Gorkogo,
+        Oktyabrskaya,
+        Sovetskaya,
+        Ippodromskaya,
+        Nemirovicha_Danchenko,
+        Novogodnyaya,
+        Geodezicheskaya,
+        Blyukhera,
+        Marksa
+    }
+
     public class Order
     {
         public int x;
         public int y;
         public int weight;
-        public bool isDroneFriendly;
         public string address;
-        public int dueTime;
+        public string dueTime;
 
-        private string[] streetNames = {"������� ��������",
-                                        "��������",
-                                        "1905 ����",
-                                        "9 �����",
-                                        "���������",
-                                        "���������� ����������",
-                                        "������",
-                                        "������",
-                                        "������ ���������",
-                                        "���� ���������",
-                                        "��������",
-                                        "������",
-                                        "���������� ��������",
-                                        "�������������",
-                                        "����������",
-                                        "������"};
+        
 
-        public Order(int X, int Y, bool droneFriendly, int Weight, int dueTime = 0)
+        public Order(int X, int Y, int Weight, int dueTime = 0)
         {
             x = X;
             y = Y;
-            isDroneFriendly = droneFriendly;
             weight = Weight;
-            if (dueTime != 0) this.dueTime = dueTime;
+            if (dueTime != 0)
+            {
+                var intervals = new DeliveryIntervals();
+                this.dueTime = intervals.Intervals.ToArray()[dueTime - 1].Key;
+            }
 
             Random rnd = new Random();
-            var street = streetNames[rnd.Next(streetNames.Length)];
+            var streets = Enum.GetNames(typeof(StreetNames));
+            var street = streets[rnd.Next(streets.Length)];
             var building = rnd.Next(150);
             address = street + " - " + building.ToString(); 
         }
@@ -91,19 +96,7 @@ namespace FSTSP_UWP
                         isWall = false;
                 }
 
-                var distanceFromDepot = Math.Sqrt(Math.Pow((x - Depot.x), 2.0) + Math.Pow((y - Depot.y), 2.0)) * BaseConstants.PolygonSize / 1000;
-
-                bool isDroneFriendly = false;
-                if (rnd.Next(2) == 0)
-                {
-
-                    if (distanceFromDepot < BaseConstants.DroneRange)
-                        isDroneFriendly = true;
-                }
-
-                ordersList.Add(new Order(x, y, 
-                                         isDroneFriendly,
-                                         rnd.Next(100, 6000)));
+                ordersList.Add(new Order(x, y, rnd.Next(100, 6000), rnd.Next(1, 4)));
                 ordersCount--;
             }
             return ordersList;
