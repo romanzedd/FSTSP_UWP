@@ -31,7 +31,8 @@ namespace FSTSP_UWP
             result += $"\nVehicle type: {this.vehicleType}";
             result += $"\n\tLocation: x = {this.location.x.ToString()}, y = {this.location.y.ToString()}, z = {this.location.z.ToString()} - ";
             result += $"{locationName}";
-            result += $"\n\tTime: {this.time.ToString("hh':'mm")}";
+            var currentTime = TimeSpan.FromSeconds(this.time);
+            result += $"\n\tTime: {currentTime.ToString(@"hh\:mm\:ss\:fff")}";
             result += $"\n\tVehicle Status: {this.vehicleStatus.ToString()}";
             result += $"\n\tOperation result: {this.operationResult}";
             return result;

@@ -6,6 +6,31 @@ using System.Threading.Tasks;
 
 namespace FSTSP_UWP
 {
+    class DeliveryInterval
+    {
+        int start;
+        int end;
+
+        public DeliveryInterval(int start, int end)
+        {
+            this.start = start;
+            this.end = end;
+        }
+    }
+
+    class DeliveryIntervals
+    {
+        Dictionary<string, DeliveryInterval> Intervals = new Dictionary<string, DeliveryInterval>();
+        
+        public DeliveryIntervals()
+        {
+            Intervals.Add("8:00 - 11:00", new DeliveryInterval(28800, 39600));
+            Intervals.Add("11:00 - 14:00", new DeliveryInterval(39600, 50400));
+            Intervals.Add("14:00 - 17:00", new DeliveryInterval(50400, 61200));
+            Intervals.Add("17:00 - 20:00", new DeliveryInterval(61200, 72000));
+        }
+    }
+
     public class Order
     {
         public int x;
@@ -46,7 +71,7 @@ namespace FSTSP_UWP
             address = street + " - " + building.ToString(); 
         }
 
-        public static List<Order> generateOrders(SquareGrid grid, Location Depot, int ordersCount, int areaSize)
+        public static List<Order> generateOrders(SquareGrid grid, Location Depot, int ordersCount, int areaSize, bool intervals = false)
         {
             Random rnd = new Random();
             List<Order> ordersList = new List<Order>();

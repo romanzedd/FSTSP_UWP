@@ -55,12 +55,17 @@ namespace FSTSP_UWP
             //doTruck(truckOrders.ToList());
         }
 
-        public string generateSpace(int areaSizeInput)
+        public async Task<string> generateSpace(int areaSizeInput)
         {
             var areaSize = areaSizeInput * 1000 / BaseConstants.PolygonSize;
             grid = new SquareGrid(areaSize, areaSize, BaseConstants.areaHeight);
-            GridGeneration.fillGrid(grid, areaSize, BaseConstants.areaHeight);
 
+            await Task.Run(() =>
+            {
+                GridGeneration.fillGrid(grid, areaSize, BaseConstants.areaHeight);
+            });
+          
+            
             groundGrid = new SquareGrid(areaSize, areaSize, 1);
             groundGrid.walls = grid.walls.Where(location => location.z == 0).ToHashSet();
 
@@ -82,7 +87,15 @@ namespace FSTSP_UWP
             if (ordersCount < 1)
                 ordersCount = 15;
 
-            orders = Order.generateOrders(grid, Depot, ordersCount, areaSize);
+            if (SettingsKeys.DeliveryIntervalKey.Equals("True"))
+            {
+                orders = Order.generateOrders(grid, Depot, ordersCount, areaSize, true);
+            }
+            else
+            {
+                orders = Order.generateOrders(grid, Depot, ordersCount, areaSize);
+            }
+            
             return $"{ordersCount} orders generated successfully\n";
         }
 

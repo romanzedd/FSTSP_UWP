@@ -51,7 +51,7 @@ namespace FSTSP_UWP
             var deliveryTime = pathLength / BaseConstants.DroneSpeed + BaseConstants.DropDeliveryTime;
             routeSheet.drone.currentPosition = routeSheet.deliveryPoint;
             routeSheet.drone.time += deliveryTime;
-            routeSheet.drone.log.Add(new Log("drone", 
+            routeSheet.drone.log.Add(new Log(routeSheet.drone.id, 
                                              routeSheet.drone.currentPosition,
                                              "base_location",
                                              routeSheet.drone.time,
@@ -64,7 +64,7 @@ namespace FSTSP_UWP
             deliveryTime = pathLength / BaseConstants.DroneSpeed;
             routeSheet.drone.currentPosition = routeSheet.meetingPoint;
             routeSheet.drone.time += deliveryTime;
-            routeSheet.drone.log.Add(new Log("drone",
+            routeSheet.drone.log.Add(new Log(routeSheet.drone.id,
                                              routeSheet.drone.currentPosition,
                                              "base_location",
                                              routeSheet.drone.time,

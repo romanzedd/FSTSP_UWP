@@ -27,11 +27,11 @@
                 </StackPanel>
             </Grid>
             <StackPanel Margin="0 8" HorizontalAlignment="Center" Orientation="Horizontal">
-                <Button MinWidth="150" Margin="0 0 8 0" Click="RunFstsp">Run FSTSP</Button>
-                <Button MinWidth="150" Click="RunTsp">Run TSP</Button>
+                <Button x:Name="runFstspBtn" MinWidth="150" Margin="0 0 8 0" Click="RunFstsp">Run FSTSP</Button>
+                <Button x:Name="runTspBtn" MinWidth="150" Click="RunTsp">Run TSP</Button>
             </StackPanel>
             <StackPanel Orientation="Vertical" >
-                <ProgressRing x:Name="progressRing" IsActive="True" Width="60" Height="60" Margin="0 10" />
+                <ProgressRing x:Name="progressRing" IsActive="True" Visibility="Collapsed" Width="60" Height="60" Margin="0 10" />
             <Grid Background="{ThemeResource ButtonBackgroundPointerOver}">
                     <ScrollViewer VerticalScrollMode="Enabled"  MinHeight="400" MaxHeight="600" VerticalScrollBarVisibility="Visible">
                         <TextBlock x:Name="outputPanel" Padding="15" TextTrimming="CharacterEllipsis">
