@@ -55,10 +55,10 @@ namespace FSTSP_UWP
                     var ordersInInterval = orders.Where(x => x.dueTime.Equals(interval.Key)).ToList();
                     timeClusteredOrders.Add(ordersInInterval);
                 }
-                
+
                 for (int i = 0; i < timeClusteredOrders.Count(); i++)
                 {
-                    if(truck.time < intervals.Intervals.ToArray()[i].Value.start)
+                    if (truck.time < intervals.Intervals.ToArray()[i].Value.start)
                     {
                         truck.status = Status.Idle;
                         truck.log.Add(new Log(truck.id,
@@ -69,7 +69,7 @@ namespace FSTSP_UWP
                                               "success"));
                         truck.time = intervals.Intervals.ToArray()[i].Value.start;
                         truck.status = Status.Ready;
-                        
+
                         foreach (var drone in truck.drones)
                         {
                             drone.status = Status.Idle;
@@ -90,7 +90,7 @@ namespace FSTSP_UWP
                     FSTSPRouting.buildUnitRoute(grid, timedOrders, truck);
                 }
             }
-            
+
             var output = ComposeResult(truck);
 
             return output;
@@ -105,8 +105,8 @@ namespace FSTSP_UWP
             {
                 GridGeneration.fillGrid(grid, areaSize, BaseConstants.areaHeight);
             });
-          
-            
+
+
             groundGrid = new SquareGrid(areaSize, areaSize, 1);
             groundGrid.walls = grid.walls.Where(location => location.z == 0).ToHashSet();
 
@@ -171,7 +171,7 @@ namespace FSTSP_UWP
 
             return droneStatusUpdate(dronePaths);
         }
-        private string  doTruck(List<Order> truckOrders)
+        private string doTruck(List<Order> truckOrders)
         {
             List<List<Location>> truckPaths = new List<List<Location>>();
             List<Location> path;
@@ -251,20 +251,20 @@ namespace FSTSP_UWP
             }
             return output;
         }
-    
+
         private string ComposeResult(Truck truck)
         {
             var result = string.Empty;
             var log = new List<Log>();
 
             log.AddRange(truck.log);
-            foreach(var drone in truck.drones)
+            foreach (var drone in truck.drones)
             {
                 log.AddRange(drone.log);
             }
 
             var sortedLog = log.OrderBy(x => x.time).ToList();
-            foreach(var entry in sortedLog)
+            foreach (var entry in sortedLog)
             {
                 result += "\n" + entry.Print();
             }

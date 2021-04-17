@@ -70,13 +70,13 @@ namespace FSTSP_UWP
             int i;
             string[] linkText = _address.Split(',');
             string[] address = linkText[0].Split(null);
-            for (i = 1; i < address.Length-1; i++)
+            for (i = 1; i < address.Length - 1; i++)
             {
                 address[0] += " " + address[i];
             }
             for (i = 0; i < node.Length; i++)
             {
-                if ((node[i].street == address[0] && node[i].house == address[address.Length-1]) || (node[i].streetEng == address[0] && node[i].house == address[address.Length - 1]))
+                if ((node[i].street == address[0] && node[i].house == address[address.Length - 1]) || (node[i].streetEng == address[0] && node[i].house == address[address.Length - 1]))
                     return node[i];
             }
             return node[0];
@@ -101,7 +101,7 @@ namespace FSTSP_UWP
                 }
             }
 
-                return new Location(-1, -1, -1);
+            return new Location(-1, -1, -1);
         }
 
     }

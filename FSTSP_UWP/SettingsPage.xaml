@@ -29,7 +29,7 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0" Grid.ColumnSpan="2" FontSize="28" FontWeight="Bold" Padding="20 20 0 0">General</TextBlock>
-                
+
                 <TextBlock VerticalAlignment="Center" Grid.Row="1" >Traffic:</TextBlock>
                 <Slider x:Name="traffic" Grid.Row="1" Grid.Column="1" Minimum="0" Maximum="10" SmallChange="1"></Slider>
 
@@ -85,5 +85,5 @@
             </Grid>
         </StackPanel>
     </ScrollViewer>
-    
+
 </Page>

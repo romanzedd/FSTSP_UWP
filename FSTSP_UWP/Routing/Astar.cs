@@ -223,7 +223,7 @@ namespace FSTSP_UWP
         {
             string[] output = new string[4];
             // Печать массива cameFrom
-           for (int z = 0; z < 4; z++)
+            for (int z = 0; z < 4; z++)
             {
                 for (var y = 0; y < 41; y++)
                 {

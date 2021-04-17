@@ -72,7 +72,7 @@ namespace FSTSP_UWP
             var picker = new Windows.Storage.Pickers.FileOpenPicker();
             picker.FileTypeFilter.Add(".xml");
             var file = await picker.PickSingleFileAsync();
-            if (file !=null)
+            if (file != null)
             {
                 this.file = file;
                 string text = await Windows.Storage.FileIO.ReadTextAsync(file);

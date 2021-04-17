@@ -99,7 +99,8 @@ namespace FSTSP_UWP
             Start.MinCostToStart = 0;
             var prioQueue = new List<Graph>();
             prioQueue.Add(Start);
-            do {
+            do
+            {
                 prioQueue = prioQueue.OrderBy(x => x.MinCostToStart + x.StraightLineDistanceToEnd).ToList();
                 var node = prioQueue.First();
                 prioQueue.Remove(node);

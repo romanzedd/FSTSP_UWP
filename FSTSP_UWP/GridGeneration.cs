@@ -100,7 +100,7 @@ namespace FSTSP_UWP
                         grid.walls.Add(new Location(x, y, 0));
                 }
             }
-            
+
 
 
             var increment = 1.0;
@@ -108,7 +108,7 @@ namespace FSTSP_UWP
             {
                 var previousLevelWalls = grid.walls.Where(location => location.z == z - 1).ToList();
                 //var newLevelWalls = new List<Location>();
-                for(int i = 0; i < previousLevelWalls.Count(); i += (int) Math.Round(increment, MidpointRounding.ToEven))
+                for (int i = 0; i < previousLevelWalls.Count(); i += (int)Math.Round(increment, MidpointRounding.ToEven))
                 {
                     grid.walls.Add(new Location(previousLevelWalls[i].x, previousLevelWalls[i].y, z));
                 }
@@ -128,7 +128,7 @@ namespace FSTSP_UWP
             Random rnd = new Random();
             for (int i = 0; i < size; i++)
             {
-                if (rnd.Next(100) > threshold && !xStreets.Contains(i-1))
+                if (rnd.Next(100) > threshold && !xStreets.Contains(i - 1))
                 {
                     xStreets.Add(i);
                 }
@@ -152,7 +152,7 @@ namespace FSTSP_UWP
             var walls = new XElement("Walls");
             Grid.Add(walls);
 
-            foreach(var wall in grid.walls)
+            foreach (var wall in grid.walls)
             {
                 walls.Add(new XElement("wall", new XElement("x", wall.x), new XElement("y", wall.y), new XElement("z", wall.z)));
             }
@@ -170,7 +170,7 @@ namespace FSTSP_UWP
 
             int length = 0, width = 0, height = 0;
             var measurements = doc.GetElementsByTagName("Measurements")[0];
-            foreach(XmlNode xnode in measurements)
+            foreach (XmlNode xnode in measurements)
             {
                 switch (xnode.Name)
                 {
@@ -189,10 +189,10 @@ namespace FSTSP_UWP
 
             var walls = doc.GetElementsByTagName("wall");
 
-            foreach(XmlNode xnode in walls)
+            foreach (XmlNode xnode in walls)
             {
                 int x = 0, y = 0, z = 0;
-                foreach(XmlNode childnode in xnode.ChildNodes)
+                foreach (XmlNode childnode in xnode.ChildNodes)
                 {
                     switch (childnode.Name)
                     {

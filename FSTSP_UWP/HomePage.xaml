@@ -11,42 +11,42 @@
     <StackPanel HorizontalAlignment="Center">
         <TextBlock FontSize="24" Margin="8 16 0 8">Prerequisites</TextBlock>
         <Grid Margin="5 10">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <StackPanel  Grid.Column="0" Orientation="Horizontal" Margin="10 0">
-                    <TextBlock VerticalAlignment="Center" Padding="0 0 5 0">Area</TextBlock>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <StackPanel  Grid.Column="0" Orientation="Horizontal" Margin="10 0">
+                <TextBlock VerticalAlignment="Center" Padding="0 0 5 0">Area</TextBlock>
                 <winui:NumberBox x:Name="areaSize" SmallChange="1" Minimum="0" Maximum="10" SpinButtonPlacementMode="Inline" Value="0"></winui:NumberBox>
                 <TextBlock VerticalAlignment="Center" Padding="2 0 5 0">km2</TextBlock>
 
             </StackPanel>
-                <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="10 0">
-                    <TextBlock VerticalAlignment="Center" Padding="0 0 5 0">Number of customers</TextBlock>
-                    <winui:NumberBox x:Name="numberOfCustomers" SmallChange="10" Minimum="0" Maximum="100" SpinButtonPlacementMode="Inline" Value="0"></winui:NumberBox>
-                    <!--<TextBox MinWidth="150" PlaceholderText="Enter number of customers"/>-->
-                </StackPanel>
-            </Grid>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="10 0">
+                <TextBlock VerticalAlignment="Center" Padding="0 0 5 0">Number of customers</TextBlock>
+                <winui:NumberBox x:Name="numberOfCustomers" SmallChange="10" Minimum="0" Maximum="100" SpinButtonPlacementMode="Inline" Value="0"></winui:NumberBox>
+                <!--<TextBox MinWidth="150" PlaceholderText="Enter number of customers"/>-->
+            </StackPanel>
+        </Grid>
         <StackPanel Margin="0 8" HorizontalAlignment="Center" Orientation="Horizontal">
             <Button  MinWidth="150" Margin="0 0 8 0" Click="SelectFile">Select file</Button>
             <TextBlock x:Name="fileSelectorTitle" VerticalAlignment="Center">No file selected</TextBlock>
         </StackPanel>
-        
+
         <TextBlock FontSize="24" Margin="8 16 0 8">Run</TextBlock>
         <StackPanel Margin="0 8" HorizontalAlignment="Center" Orientation="Horizontal">
-                <Button x:Name="runFstspBtn" MinWidth="150" Margin="0 0 8 0" Click="RunFstsp">Run FSTSP</Button>
-                <Button x:Name="runTspBtn" MinWidth="150" Click="RunTsp">Run TSP</Button>
-            </StackPanel>
-            <StackPanel Orientation="Vertical" >
-                <ProgressRing x:Name="progressRing" IsActive="True" Visibility="Collapsed" Width="60" Height="60" Margin="0 10" />
+            <Button x:Name="runFstspBtn" MinWidth="150" Margin="0 0 8 0" Click="RunFstsp">Run FSTSP</Button>
+            <Button x:Name="runTspBtn" MinWidth="150" Click="RunTsp">Run TSP</Button>
+        </StackPanel>
+        <StackPanel Orientation="Vertical" >
+            <ProgressRing x:Name="progressRing" IsActive="True" Visibility="Collapsed" Width="60" Height="60" Margin="0 10" />
             <TextBlock FontSize="24" Margin="8 16 0 8">Logs</TextBlock>
             <Grid Background="{ThemeResource ButtonBackgroundPointerOver}">
-                    <ScrollViewer VerticalScrollMode="Enabled"  MinHeight="400" MaxHeight="600" VerticalScrollBarVisibility="Visible">
-                        <TextBlock x:Name="outputPanel" Padding="15" TextTrimming="CharacterEllipsis">
+                <ScrollViewer VerticalScrollMode="Enabled"  MinHeight="400" MaxHeight="600" VerticalScrollBarVisibility="Visible">
+                    <TextBlock x:Name="outputPanel" Padding="15" TextTrimming="CharacterEllipsis">
                         this it the test output os the program
-                        </TextBlock>
-                    </ScrollViewer>
-                </Grid>
-            </StackPanel>
+                    </TextBlock>
+                </ScrollViewer>
+            </Grid>
         </StackPanel>
+    </StackPanel>
 </Page>

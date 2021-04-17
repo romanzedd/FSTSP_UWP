@@ -13,7 +13,7 @@ namespace FSTSP_UWP
         public static int DropDeliveryTime = 120; // seconds required to drop delivery at customer
 
         public static int TruckSpeed = 5;//meters per second
-         
+
         public static int PolygonSize = 5; //in paper it says 5, but generation for 5 is taking way too long
         public static int areaHeight = 10;
 

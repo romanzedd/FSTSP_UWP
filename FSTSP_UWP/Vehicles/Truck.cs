@@ -37,10 +37,10 @@ namespace FSTSP_UWP
             var deliveryTime = pathLength / BaseConstants.TruckSpeed + BaseConstants.DropDeliveryTime;
 
             truck.time += deliveryTime;
-            truck.status = Status.Ready;           
+            truck.status = Status.Ready;
             truck.currentPosition = deliveryLocation;
             var availableDrones = truck.drones.Where(x => x.status.Equals(Status.Available)).ToList();
-            foreach(var drone in availableDrones)
+            foreach (var drone in availableDrones)
             {
                 drone.currentPosition = truck.currentPosition;
             }
