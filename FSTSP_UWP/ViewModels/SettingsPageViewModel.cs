@@ -2,14 +2,11 @@
 using Microsoft.Toolkit.Mvvm.Input;
 using System;
 using System.Windows.Input;
-using Windows.Storage;
 
 namespace FSTSP_UWP.ViewModels
 {
     public class SettingsPageViewModel : ObservableObject
     {
-        private static ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
-
         public ICommand SaveCommand { get; set; }
 
         private int _traffic = 0;
@@ -80,24 +77,24 @@ namespace FSTSP_UWP.ViewModels
 
         public void OnLoad()
         {
-            Traffic = (int?)localSettings.Values[SettingsKeys.TrafficKey] ?? 0;
-            DeliveryInterval = (bool?)localSettings.Values[SettingsKeys.DeliveryIntervalKey] ?? false;
-            Temperature = (int?)localSettings.Values[SettingsKeys.TemperatureKey] ?? 0;
-            Percipitation = (int?)localSettings.Values[SettingsKeys.PercipitationKey] ?? 0;
-            PercipitationType = (string)localSettings.Values[SettingsKeys.PercipitationTypeKey] ?? string.Empty;
-            Wind = (int?)localSettings.Values[SettingsKeys.WindKey] ?? 0;
-            GeoIndex = (int?)localSettings.Values[SettingsKeys.GeoIndexKey] ?? 0;
+            Traffic = Settings.TrafficScore;
+            DeliveryInterval = Settings.DeliveryInterval;
+            Temperature = Settings.Temperature;
+            Percipitation = Settings.PrecipitationVolume;
+            PercipitationType = Settings.PrecipitationType;
+            Wind = Settings.Wind;
+            GeoIndex = Settings.GAIndex;
         }
 
         public void OnSave()
         {
-            localSettings.Values[SettingsKeys.TrafficKey] = Traffic;
-            localSettings.Values[SettingsKeys.DeliveryIntervalKey] = DeliveryInterval;
-            localSettings.Values[SettingsKeys.TemperatureKey] = Temperature;
-            localSettings.Values[SettingsKeys.PercipitationKey] = Percipitation;
-            localSettings.Values[SettingsKeys.PercipitationTypeKey] = PercipitationType;
-            localSettings.Values[SettingsKeys.WindKey] = Wind;
-            localSettings.Values[SettingsKeys.GeoIndexKey] = GeoIndex;
+            Settings.TrafficScore = Traffic;
+            Settings.DeliveryInterval = DeliveryInterval;
+            Settings.Temperature = Temperature;
+            Settings.PrecipitationVolume = Percipitation;
+            Settings.PrecipitationType = PercipitationType;
+            Settings.Wind = Wind;
+            Settings.GAIndex = GeoIndex;
         }
     }
 }
