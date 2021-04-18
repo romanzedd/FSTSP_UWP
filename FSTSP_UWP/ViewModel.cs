@@ -21,11 +21,11 @@ namespace FSTSP_UWP
 
         public int AreaSize = 0;
 
-        public string runTSP(int areaSizeInput, int numberOfCustomers)
+        public async Task<string> runTSP(int areaSizeInput, int numberOfCustomers)
         {
             var areaSize = areaSizeInput * 1000 / BaseConstants.PolygonSize; //sets size in nodes
             Depot = new Location(areaSize / 2, areaSize / 2, 0);
-            generateSpace(areaSize, 1);
+            await generateSpace(areaSize, 1);
             groundGrid = grid;
             generateOrders(areaSize, numberOfCustomers);
             var result = doTruck(orders);
@@ -112,11 +112,14 @@ namespace FSTSP_UWP
             return $"Space of {areaSizeInput} km2 ({areaSize * areaSize * BaseConstants.areaHeight} polygons) generated successfully\n";
         }
 
-        public string generateSpace(int areaSizeInput, int areaHeight)
+        public async Task<string> generateSpace(int areaSizeInput, int areaHeight)
         {
             var areaSize = areaSizeInput * 1000 / BaseConstants.PolygonSize;
             grid = new SquareGrid(areaSize, areaSize, areaHeight);
-            GridGeneration.fillGrid(grid, areaSize, areaHeight);
+            await Task.Run(() =>
+            {
+                GridGeneration.fillGrid(grid, areaSize, areaHeight);
+            });
             return $"Space of {areaSizeInput} km2 ({areaSize * areaSize * areaHeight} polygons) generated successfully\n";
         }
 

@@ -124,8 +124,9 @@
     <Compile Include="SettingsKeys.cs" />
     <Compile Include="FSTSPRouting.cs" />
     <Compile Include="GridGeneration.cs" />
-    <Compile Include="HomePage.xaml.cs">
+    <Compile Include="ViewModels\HomePageViewModel.cs" />
     <Compile Include="ViewModels\SettingsPageViewModel.cs" />
+    <Compile Include="Views\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Log.cs" />
@@ -169,7 +170,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="HomePage.xaml">
+    <Page Include="Views\HomePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
