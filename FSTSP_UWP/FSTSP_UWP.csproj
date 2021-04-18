@@ -125,6 +125,7 @@
     <Compile Include="FSTSPRouting.cs" />
     <Compile Include="GridGeneration.cs" />
     <Compile Include="HomePage.xaml.cs">
+    <Compile Include="ViewModels\SettingsPageViewModel.cs" />
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Log.cs" />
@@ -136,7 +137,7 @@
     <Compile Include="Routing\Astar.cs" />
     <Compile Include="Routing\routing.cs" />
     <Compile Include="Routing\Search.cs" />
-    <Compile Include="SettingsPage.xaml.cs">
+    <Compile Include="Views\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Space\Graph.cs" />
@@ -176,7 +177,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="SettingsPage.xaml">
+    <Page Include="Views\SettingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
