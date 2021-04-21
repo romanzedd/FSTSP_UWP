@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 //using System.Windows.Forms;
-using System.IO;
-using System.Security.Cryptography;
 
 namespace FSTSP_UWP
 {
@@ -18,11 +12,11 @@ namespace FSTSP_UWP
                 StringSplitOptions.None
             );
 
-            for (int i = 0; i < numLines-1; i++)
+            for (int i = 0; i < numLines - 1; i++)
             {
                 double altitude = 20.0;
                 string[] words = lines[i].Split('\t');
-                node[i] = new Graph(i + 1, words[1], words[2], words[3], double.Parse(words[4], System.Globalization.CultureInfo.InvariantCulture), 
+                node[i] = new Graph(i + 1, words[1], words[2], words[3], double.Parse(words[4], System.Globalization.CultureInfo.InvariantCulture),
                     double.Parse(words[5], System.Globalization.CultureInfo.InvariantCulture), altitude, 0);
                 altitude += 30;
                 node[i + (numLines - 1) * 1] = new Graph(i + (node.Length / 4 * 1) + 1, words[1], words[2], words[3], double.Parse(words[4], System.Globalization.CultureInfo.InvariantCulture),
@@ -63,7 +57,7 @@ namespace FSTSP_UWP
                 {
                     Rib edge = new Rib();
                     routing route = new routing();
-                    node[indexes[0] - 1].neighbourhood.Add(node[indexes[j]-1]);
+                    node[indexes[0] - 1].neighbourhood.Add(node[indexes[j] - 1]);
 
                     edge.ConnectedNode = node[indexes[j] - 1];
                     edge.Length = route.Haversine(node[indexes[0] - 1].latitude, node[indexes[j] - 1].latitude, node[indexes[0] - 1].longitude, node[indexes[j] - 1].longitude, node[indexes[0] - 1].altitude, node[indexes[j] - 1].altitude);
@@ -197,7 +191,7 @@ namespace FSTSP_UWP
 
         //    AES.KeySize = 256;
         //    AES.BlockSize = 128;
-            
+
         //    var key = new Rfc2898DeriveBytes(passwordBytes, saltBytes, 1000);
         //    AES.Key = key.GetBytes(AES.KeySize / 8);
         //    AES.IV = key.GetBytes(AES.BlockSize / 8);

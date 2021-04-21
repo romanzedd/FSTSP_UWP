@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FSTSP_UWP
 {
@@ -26,8 +23,8 @@ namespace FSTSP_UWP
 
         public static void loadDrones(Truck truck, Drone drone)
         {
-             drone.time += BaseConstants.DroneLoadTime;
-             truck.time += BaseConstants.DroneLoadTime;
+            drone.time += BaseConstants.DroneLoadTime;
+            truck.time += BaseConstants.DroneLoadTime;
         }
         public static void retrieveDrones(Truck truck, List<Drone> drones)
         {
@@ -51,7 +48,7 @@ namespace FSTSP_UWP
             var deliveryTime = pathLength / BaseConstants.DroneSpeed + BaseConstants.DropDeliveryTime;
             routeSheet.drone.currentPosition = routeSheet.deliveryPoint;
             routeSheet.drone.time += deliveryTime;
-            routeSheet.drone.log.Add(new Log(routeSheet.drone.id, 
+            routeSheet.drone.log.Add(new Log(routeSheet.drone.id,
                                              routeSheet.drone.currentPosition,
                                              ViewModel.orders.Where(x => (x.x == routeSheet.drone.currentPosition.x && x.y == routeSheet.drone.currentPosition.y)).FirstOrDefault()?.address,
                                              routeSheet.drone.time,
@@ -71,7 +68,7 @@ namespace FSTSP_UWP
                                              routeSheet.drone.time,
                                              routeSheet.drone.status,
                                              "success"));
-            
+
 
 
         }

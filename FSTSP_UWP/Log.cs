@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FSTSP_UWP
 {
@@ -14,7 +10,7 @@ namespace FSTSP_UWP
         public int time;
         Status vehicleStatus;
         string operationResult;
-    
+
         public Log(string VehicleType, Location Location, string LocationName, int Time, Status VehicleStatus, string OperationResult)
         {
             vehicleType = VehicleType;

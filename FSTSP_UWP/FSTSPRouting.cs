@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FSTSP_UWP
 {
@@ -19,7 +16,7 @@ namespace FSTSP_UWP
 
                     List<Location> truckRoute = new List<Location>();
                     truckRoute.Add(truck.currentPosition);
-                    foreach(var sheet in routeSheets)
+                    foreach (var sheet in routeSheets)
                     {
                         sheet.drone.status = Status.Preparing;
                         truckRoute.Add(sheet.meetingPoint);
@@ -30,7 +27,7 @@ namespace FSTSP_UWP
                         truckRoute.Add(new Location(orders.First().x, orders.First().y, 0));
                     }
 
-                    for (int i = 0; i < truckRoute.Count()-1; i++)
+                    for (int i = 0; i < truckRoute.Count() - 1; i++)
                     {
                         var awaitingDrones = truck.drones.Where(drone => drone.status.Equals(Status.Awaitng) && drone.currentPosition.Equals(truck.currentPosition)).ToList();
                         Vehicle.compareAndUpdateTime(awaitingDrones, truck);
@@ -58,13 +55,13 @@ namespace FSTSP_UWP
         private static List<droneRouteSheet> selectDronesOrders(List<Drone> availableDrones, List<Order> orders)
         {
             List<droneRouteSheet> routeSheets = new List<droneRouteSheet>();
-            foreach(var drone in availableDrones)
+            foreach (var drone in availableDrones)
             {
                 var candidateOrders = orders.Where(order => order.weight < drone.maxWeight);
                 if (candidateOrders.Count() == 0) continue;
 
                 Location orderToDeliver;
-                foreach(var order in candidateOrders)
+                foreach (var order in candidateOrders)
                 {
                     if (routeSheets.Where(x => x.deliveryPoint.Equals(new Location(order.x, order.y, 0))
                                             || x.meetingPoint.Equals(new Location(order.x, order.y, 0))).Count() == 0)
@@ -72,7 +69,7 @@ namespace FSTSP_UWP
                         orderToDeliver = new Location(order.x, order.y, 0);
 
                         var orderToDeliverIndex = orders.IndexOf(order);
-                        var meetingPoint = orderToDeliverIndex + 1 < orders.Count() ? 
+                        var meetingPoint = orderToDeliverIndex + 1 < orders.Count() ?
                                                 new Location(orders[orderToDeliverIndex + 1].x, orders[orderToDeliverIndex + 1].y, 0) : ViewModel.Depot;
                         var distance = Location.surfaceDistance(drone.currentPosition, orderToDeliver);
                         distance += Location.surfaceDistance(orderToDeliver, meetingPoint);
@@ -80,7 +77,7 @@ namespace FSTSP_UWP
 
                         if (distance < drone.range)
                         {
-                            var newRouteSheet = new droneRouteSheet(drone, 
+                            var newRouteSheet = new droneRouteSheet(drone,
                                                                     drone.currentPosition,
                                                                     orderToDeliver,
                                                                     meetingPoint);
@@ -89,7 +86,7 @@ namespace FSTSP_UWP
                         }
                     }
                     else continue;
-                }                
+                }
             }
             return routeSheets;
         }

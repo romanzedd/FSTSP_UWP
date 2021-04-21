@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FSTSP_UWP
 {
@@ -17,21 +14,21 @@ namespace FSTSP_UWP
         //public string log = string.Empty;
         public List<Log> log = new List<Log>();
 
-        
+
         public static void compareAndUpdateTime(List<Drone> drones, Truck truck)
         {
             var maxTime = 0;
             List<Vehicle> vehicles = new List<Vehicle>();
             vehicles.Add(truck);
-            foreach(var drone in drones)
+            foreach (var drone in drones)
             {
                 vehicles.Add(drone);
-                if (drone.time > maxTime) 
+                if (drone.time > maxTime)
                     maxTime = drone.time;
             }
             if (truck.time > maxTime) maxTime = truck.time;
 
-            foreach(var vehicle in vehicles.Where(x => !(x.time == maxTime)))
+            foreach (var vehicle in vehicles.Where(x => !(x.time == maxTime)))
             {
                 updateTime(vehicle, maxTime);
             }

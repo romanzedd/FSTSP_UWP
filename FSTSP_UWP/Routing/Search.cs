@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 //using Common;
 
 namespace FSTSP_UWP
@@ -99,7 +96,8 @@ namespace FSTSP_UWP
             Start.MinCostToStart = 0;
             var prioQueue = new List<Graph>();
             prioQueue.Add(Start);
-            do {
+            do
+            {
                 prioQueue = prioQueue.OrderBy(x => x.MinCostToStart + x.StraightLineDistanceToEnd).ToList();
                 var node = prioQueue.First();
                 prioQueue.Remove(node);

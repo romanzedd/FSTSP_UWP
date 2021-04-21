@@ -1,16 +1,8 @@
-﻿using System;
+﻿using FSTSP_UWP.Views;
+using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
@@ -44,11 +36,11 @@ namespace FSTSP_UWP
         {
             NavView.IsBackEnabled = ContentFrame.CanGoBack;
 
-            if(ContentFrame.SourcePageType == typeof(HomePage))
+            if (ContentFrame.SourcePageType == typeof(HomePage))
             {
                 NavView.SelectedItem = (NavigationViewItem)NavView.SettingsItem;
             }
-            
+
         }
 
         private void NavViewNavigate(string pageTag, Windows.UI.Xaml.Media.Animation.NavigationTransitionInfo transitionInfo)
@@ -57,11 +49,14 @@ namespace FSTSP_UWP
             if (pageTag == "home")
             {
                 _page = typeof(HomePage);
-            } else if (pageTag == "settings") {
+            }
+            else if (pageTag == "settings")
+            {
                 _page = typeof(SettingsPage);
             }
             var preNavPageType = ContentFrame.CurrentSourcePageType;
-            if (!(_page is null) && !Type.Equals(preNavPageType, _page) ){
+            if (!(_page is null) && !Type.Equals(preNavPageType, _page))
+            {
                 ContentFrame.Navigate(_page, null, transitionInfo);
             }
         }

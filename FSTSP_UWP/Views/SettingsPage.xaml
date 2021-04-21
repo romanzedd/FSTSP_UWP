@@ -1,14 +1,16 @@
 ﻿<Page
-    x:Class="FSTSP_UWP.SettingsPage"
+    x:Class="FSTSP_UWP.Views.SettingsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:FSTSP_UWP"
+    xmlns:viewmodals="using:FSTSP_UWP.ViewModels"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:winui="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+    <Page.DataContext>
+        <viewmodals:SettingsPageViewModel x:Name="ViewModel" />
+    </Page.DataContext>
     <ScrollViewer Padding="15" MaxWidth="700">
         <StackPanel Orientation="Vertical">
             <Grid >
@@ -29,12 +31,12 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0" Grid.ColumnSpan="2" FontSize="28" FontWeight="Bold" Padding="20 20 0 0">General</TextBlock>
-                
+
                 <TextBlock VerticalAlignment="Center" Grid.Row="1" >Traffic:</TextBlock>
-                <Slider x:Name="traffic" Grid.Row="1" Grid.Column="1" Minimum="0" Maximum="10" SmallChange="1"></Slider>
+                <Slider Grid.Row="1" Grid.Column="1" Minimum="0" Maximum="10" SmallChange="1" Value="{x:Bind ViewModel.Traffic, Mode=TwoWay}" />
 
                 <TextBlock VerticalAlignment="Center" Grid.Row="2" >Delivery intervals:</TextBlock>
-                <CheckBox x:Name="deliveryInterval" Grid.Row="2" Grid.Column="1" ></CheckBox>
+                <CheckBox Grid.Row="2" Grid.Column="1" IsChecked="{x:Bind ViewModel.DeliveryInterval, Mode=TwoWay}"></CheckBox>
 
                 <TextBlock Grid.Row="3" Grid.ColumnSpan="2" FontSize="28" FontWeight="Bold" Padding="20 20 0 0">Weather</TextBlock>
 
@@ -44,7 +46,7 @@
                         <ColumnDefinition />
                         <ColumnDefinition Width="auto"/>
                     </Grid.ColumnDefinitions>
-                    <winui:NumberBox x:Name="temperature" Grid.Column="0" SmallChange="2" Minimum="-50" Maximum="100" SpinButtonPlacementMode="Inline" Value="0"></winui:NumberBox>
+                    <winui:NumberBox Grid.Column="0" SmallChange="2" Minimum="-50" Maximum="100" SpinButtonPlacementMode="Inline" Value="{x:Bind ViewModel.Temperature, Mode=TwoWay}" />
                     <TextBlock Grid.Column="1" VerticalAlignment="Center" HorizontalTextAlignment="Right" Padding="5 0 5 0" MinWidth="30" >°C</TextBlock>
                 </Grid>
 
@@ -54,16 +56,17 @@
                         <ColumnDefinition />
                         <ColumnDefinition Width="auto"/>
                     </Grid.ColumnDefinitions>
-                    <winui:NumberBox x:Name="percipitation" Grid.Column="0" SmallChange="5" Minimum="0" Maximum="100" SpinButtonPlacementMode="Inline" Value="0" ></winui:NumberBox>
+                    <winui:NumberBox Grid.Column="0" SmallChange="5" Minimum="0" Maximum="100" SpinButtonPlacementMode="Inline" Value="{x:Bind ViewModel.Percipitation, Mode=TwoWay}" />
                     <TextBlock Grid.Column="1" VerticalAlignment="Center"  HorizontalTextAlignment="Right" Padding="5 0 5 0" MinWidth="30">%</TextBlock>
                 </Grid>
 
                 <TextBlock VerticalAlignment="Center" Grid.Row="6">Percipitation type:</TextBlock>
-                <ComboBox x:Name="percipitationType" Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="0 0 30 0">
+                <ComboBox Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="0 0 30 0" SelectedItem="{x:Bind ViewModel.PercipitationType, Mode=TwoWay}" >
                     <x:String>Showers</x:String>
                     <x:String>Snowfall</x:String>
                     <x:String>Hail</x:String>
                 </ComboBox>
+
 
                 <TextBlock VerticalAlignment="Center" Grid.Row="7" >Wind:</TextBlock>
                 <Grid VerticalAlignment="Center"  Grid.Row="7" Grid.Column="1">
@@ -71,19 +74,17 @@
                         <ColumnDefinition />
                         <ColumnDefinition Width="auto"/>
                     </Grid.ColumnDefinitions>
-                    <winui:NumberBox x:Name="wind" Grid.Column="0" SmallChange="1" Minimum="0" Maximum="35" SpinButtonPlacementMode="Inline" Value="0" ></winui:NumberBox>
+                    <winui:NumberBox Grid.Column="0" SmallChange="1" Minimum="0" Maximum="35" SpinButtonPlacementMode="Inline" Value="{x:Bind ViewModel.Wind, Mode=TwoWay}" />
                     <TextBlock Grid.Column="1" VerticalAlignment="Center"  HorizontalTextAlignment="Right" Padding="5 0 0 0" MinWidth="30">m/s</TextBlock>
                 </Grid>
 
                 <TextBlock VerticalAlignment="Center"  Grid.Row="8" >Geomagnetic activity index:</TextBlock>
-                <winui:NumberBox x:Name="geoIndex" Grid.Column="1"  Grid.Row="8" VerticalAlignment="Center" SmallChange="1" SpinButtonPlacementMode="Inline" Value="0" Margin="0 0 30 0" ></winui:NumberBox>
+                <winui:NumberBox Grid.Column="1"  Grid.Row="8" VerticalAlignment="Center" SmallChange="1" SpinButtonPlacementMode="Inline" Margin="0 0 30 0" Value="{x:Bind ViewModel.GeoIndex, Mode=TwoWay}" />
 
                 <StackPanel Grid.Row="9" Grid.ColumnSpan="2" HorizontalAlignment="Right" Margin="0 15 30 0">
-                    <Button MinWidth="80" Click="SaveSettings" >Save</Button>
+                    <Button MinWidth="80" Command="{x:Bind Path=ViewModel.SaveCommand}">Save</Button>
                 </StackPanel>
-
             </Grid>
         </StackPanel>
     </ScrollViewer>
-    
 </Page>

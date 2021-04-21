@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 //using System.Windows.Forms;
 
 namespace FSTSP_UWP
@@ -80,14 +77,14 @@ namespace FSTSP_UWP
                 }
                 latitude = x0;
                 longitude = y0;
-                latitude += (0.000025 * (x+1));
-                longitude += (0.000311 * (x+1));
+                latitude += (0.000025 * (x + 1));
+                longitude += (0.000311 * (x + 1));
             }
             Connect(ref map, dimX, dimY, dimZ);
         }
         private void Connect(ref Graph[,,] map, int dimX, int dimY, int dimZ)
         {
-           // string mapp = null;
+            // string mapp = null;
             for (int x = 0; x < dimX; x++)
             {
                 for (int y = 0; y < dimY; y++)
@@ -130,7 +127,7 @@ namespace FSTSP_UWP
                     //else
                     //    mapp += "B";
                 }
-               // mapp += "\n";
+                // mapp += "\n";
             }
             //MessageBox.Show(mapp);
         }

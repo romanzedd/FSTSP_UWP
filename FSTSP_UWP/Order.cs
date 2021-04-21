@@ -1,8 +1,6 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FSTSP_UWP
 {
@@ -21,7 +19,7 @@ namespace FSTSP_UWP
     public class DeliveryIntervals
     {
         public Dictionary<string, DeliveryInterval> Intervals = new Dictionary<string, DeliveryInterval>();
-        
+
         public DeliveryIntervals()
         {
             Intervals.Add("8:00 - 11:00", new DeliveryInterval(28800, 39600));
@@ -56,7 +54,7 @@ namespace FSTSP_UWP
         public string address;
         public string dueTime;
 
-        
+
 
         public Order(int X, int Y, int Weight, int dueTime = 0)
         {
@@ -73,7 +71,7 @@ namespace FSTSP_UWP
             var streets = Enum.GetNames(typeof(StreetNames));
             var street = streets[rnd.Next(streets.Length)];
             var building = rnd.Next(150);
-            address = street + " - " + building.ToString(); 
+            address = street + " - " + building.ToString();
         }
 
         public static List<Order> generateOrders(SquareGrid grid, Location Depot, int ordersCount, int areaSize, bool intervals = false)
@@ -126,7 +124,7 @@ namespace FSTSP_UWP
             if (closestOrder is null) return null;
             var dist = distance(current.x, current.y, closestOrder.x, closestOrder.y);
 
-            foreach(var order in orders)
+            foreach (var order in orders)
             {
                 var tempDist = distance(current.x, current.y, order.x, order.y);
                 if (tempDist < dist)

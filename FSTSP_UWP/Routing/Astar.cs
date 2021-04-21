@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
 //using System.Windows.Forms;
 
 namespace FSTSP_UWP
@@ -223,7 +219,7 @@ namespace FSTSP_UWP
         {
             string[] output = new string[4];
             // Печать массива cameFrom
-           for (int z = 0; z < 4; z++)
+            for (int z = 0; z < 4; z++)
             {
                 for (var y = 0; y < 41; y++)
                 {
