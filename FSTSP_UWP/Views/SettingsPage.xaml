@@ -62,6 +62,7 @@
 
                 <TextBlock VerticalAlignment="Center" Grid.Row="6">Percipitation type:</TextBlock>
                 <ComboBox Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="0 0 30 0" SelectedItem="{x:Bind ViewModel.PercipitationType, Mode=TwoWay}" >
+                    <x:String>No Precipitation</x:String>
                     <x:String>Showers</x:String>
                     <x:String>Snowfall</x:String>
                     <x:String>Hail</x:String>

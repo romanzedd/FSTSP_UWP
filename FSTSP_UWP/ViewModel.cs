@@ -37,9 +37,32 @@ namespace FSTSP_UWP
             var areaSize = areaSizeInput * 1000 / BaseConstants.PolygonSize; //sets size in nodes
             Depot = new Location(areaSize / 2, areaSize / 2, 0);
 
+            var weatherConditions = checkWeatherConditions();
+            if (weatherConditions == string.Empty)
+            {
+                weatherConditions = "\nWeather conditions OK";
+            }
+            else
+            {
+                return weatherConditions;
+            }
+
             generateOrders(areaSize, numberOfCustomers);
             var truck = generateTruck("truck1", 3, areaSize);
 
+            performDelivery(truck);
+
+            var output = ComposeResult(truck);
+
+            return string.Concat(weatherConditions, output);
+        }
+
+        /// <summary>
+        /// Performs delivery depending on wether deliveries are scheduled or not, based on settings value
+        /// </summary>
+        /// <param name="truck"></param>
+        private void performDelivery(Truck truck)
+        {
             if (!Settings.DeliveryInterval)
             {
                 Order.sortOrders(ref orders, Depot);
@@ -89,10 +112,31 @@ namespace FSTSP_UWP
                     FSTSPRouting.buildUnitRoute(grid, timedOrders, truck);
                 }
             }
+        }
 
-            var output = ComposeResult(truck);
+        private string checkWeatherConditions()
+        {
+            var result = string.Empty;
 
-            return output;
+            if (Settings.Temperature <= -10 || Settings.Temperature >= 50)
+                result += "\n\tTemperature is out of operable range";
+            if (Settings.PrecipitationType.Equals("Showers") || Settings.PrecipitationType.Equals("Snowfall"))
+            {
+                if ((Settings.Temperature >= -5 && Settings.PrecipitationVolume >= 40) ||
+                    (Settings.Temperature <= -5 && Settings.PrecipitationVolume >= 60))
+                    result += "\n\tHeavy precipation probability";
+            }
+            else if (Settings.PrecipitationType.Equals("Hail"))
+                result += "\n\tHail";
+            if (Settings.Wind > 10)
+                result += "\n\tStrong wind";
+            if (Settings.GAIndex > 3)
+                result += "\n\tGeomagnetic activity index is high";
+
+            if (result != string.Empty)
+                result = string.Concat("\nDrone delivery is not possible due to next reasons:", result);
+
+            return result;
         }
 
         public async Task<string> generateSpace(int areaSizeInput)
