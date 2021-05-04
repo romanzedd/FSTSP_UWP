@@ -53,7 +53,7 @@ namespace FSTSP_UWP
                                              ViewModel.orders.Where(x => (x.x == routeSheet.drone.currentPosition.x && x.y == routeSheet.drone.currentPosition.y)).FirstOrDefault()?.address,
                                              routeSheet.drone.time,
                                              routeSheet.drone.status,
-                                             "success"));
+                                             "Delivery finished"));
 
             path.Clear();
             path.AddRange(simpleRoute(grid, routeSheet.deliveryPoint, routeSheet.meetingPoint));

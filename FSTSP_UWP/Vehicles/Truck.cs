@@ -46,7 +46,7 @@ namespace FSTSP_UWP
                                   ViewModel.orders.Where(x => (x.x == truck.currentPosition.x && x.y == truck.currentPosition.y)).FirstOrDefault()?.address,
                                   truck.time,
                                   truck.status,
-                                  "success"));
+                                  "Delivery finished"));
         }
     }
 }

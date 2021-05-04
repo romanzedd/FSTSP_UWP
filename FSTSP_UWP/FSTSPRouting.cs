@@ -5,8 +5,10 @@ namespace FSTSP_UWP
 {
     public class FSTSPRouting
     {
-        public static void buildUnitRoute(SquareGrid grid, List<Order> orders, Truck truck)
+        public static void buildUnitRoute(SquareGrid grid, List<Order> GlobalOrders, Truck truck)
         {
+            var orders = new List<Order>();
+            orders.AddRange(GlobalOrders);
             while (orders.Count() > 0)
             {
                 if (truck.status.Equals(Status.Ready))

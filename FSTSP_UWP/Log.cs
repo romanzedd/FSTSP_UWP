@@ -6,10 +6,10 @@ namespace FSTSP_UWP
     {
         string vehicleType;
         Location location;
-        string locationName;
+        public string locationName;
         public int time;
         Status vehicleStatus;
-        string operationResult;
+        public string operationResult;
 
         public Log(string VehicleType, Location Location, string LocationName, int Time, Status VehicleStatus, string OperationResult)
         {

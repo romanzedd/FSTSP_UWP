@@ -49,8 +49,14 @@ namespace FSTSP_UWP
 
             generateOrders(areaSize, numberOfCustomers);
             var truck = generateTruck("truck1", 3, areaSize);
-
-            performDelivery(truck);
+            try
+            {
+                performDelivery(truck);
+            }
+            catch (Exception ex) 
+            {
+                return "Unhandled exception during path reconstruction\nPlease try again";
+            };
 
             var output = ComposeResult(truck);
 
@@ -66,6 +72,11 @@ namespace FSTSP_UWP
             if (!Settings.DeliveryInterval)
             {
                 Order.sortOrders(ref orders, Depot);
+
+                var ordersString = string.Empty;
+                foreach (var o in orders)
+                    ordersString += $"{o.address}\t--\t{o.x}.{o.y}\n";
+
                 FSTSPRouting.buildUnitRoute(grid, orders, truck);
             }
             else
@@ -303,10 +314,10 @@ namespace FSTSP_UWP
             var result = string.Empty;
             var log = new List<Log>();
 
-            log.AddRange(truck.log);
+            log.AddRange(truck.log.Where(x => x.operationResult.Equals("Delivery finished")));
             foreach (var drone in truck.drones)
             {
-                log.AddRange(drone.log);
+                log.AddRange(drone.log.Where(x => x.operationResult.Equals("Delivery finished")));
             }
 
             var sortedLog = log.OrderBy(x => x.time).ToList();
