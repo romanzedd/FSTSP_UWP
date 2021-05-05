@@ -69,6 +69,10 @@ namespace FSTSP_UWP
         /// <param name="truck"></param>
         private void performDelivery(Truck truck)
         {
+            if (Settings.TrafficScore != 0)
+                adjustTruckSpeed();
+            
+
             if (!Settings.DeliveryInterval)
             {
                 Order.sortOrders(ref orders, Depot);
@@ -123,6 +127,21 @@ namespace FSTSP_UWP
                     FSTSPRouting.buildUnitRoute(grid, timedOrders, truck);
                 }
             }
+        }
+
+        private void adjustTruckSpeed()
+        {
+            double doubleSpeed = BaseConstants.TruckSpeedConst * (1 - ((double)Settings.TrafficScore / 20));
+            BaseConstants.TruckSpeed = (int)Math.Ceiling(doubleSpeed);
+        }
+
+        public static void adjustTruckSpeed(int currentTime)
+        {
+            var hour = TimeSpan.FromSeconds(currentTime).Hours;
+            var trafficScore = BaseConstants.trafficByTime.GetValueOrDefault(hour);
+
+            double doubleSpeed = BaseConstants.TruckSpeedConst * (1 - ((double)trafficScore / 20));
+            BaseConstants.TruckSpeed = (int)Math.Ceiling(doubleSpeed);
         }
 
         private string checkWeatherConditions()

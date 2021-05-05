@@ -11,10 +11,15 @@ namespace FSTSP_UWP
             orders.AddRange(GlobalOrders);
             while (orders.Count() > 0)
             {
+                if(Settings.TrafficScore == 0)
+                {
+                    ViewModel.adjustTruckSpeed(truck.time);
+                }
+
                 if (truck.status.Equals(Status.Ready))
                 {
                     var availableDrones = truck.drones.Where(drone => drone.status.Equals(Status.Available)).ToList();
-                    var routeSheets = selectDronesOrders(availableDrones, orders); //TODO: рассмотри кейс, когда их ноль. Сейчас грузовик никуда не поедет.
+                    var routeSheets = selectDronesOrders(availableDrones, orders);
 
                     List<Location> truckRoute = new List<Location>();
                     truckRoute.Add(truck.currentPosition);
