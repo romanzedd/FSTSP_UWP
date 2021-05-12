@@ -8,8 +8,8 @@
 
   <Identity
     Name="eeb4604c-ff12-4d63-bb8e-fa71263d50ed"
-    Publisher="CN=rzayk"
-    Version="1.0.0.0" />
+    Publisher="CN=Roman Zayko"
+    Version="0.9.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="eeb4604c-ff12-4d63-bb8e-fa71263d50ed" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 

@@ -16,7 +16,6 @@ namespace FSTSP_UWP
             destination = new Location(-1, -1, -1);
             time = 28800;
             fulfilledOrders = new List<Order>();
-            //log = string.Empty;
         }
 
         public static void doTruckDelivery(SquareGrid grid, Truck truck, Location start, Location deliveryLocation)

@@ -95,7 +95,16 @@ namespace FSTSP_UWP.ViewModels
         private async Task OnRunTsp()
         {
             IsLoading = true;
-            LogResult("new line");
+
+            var result = string.Empty;
+            ResetLog();
+
+            result = await BusinessLogic.generateSpace(Area, 1);
+            LogResult(result);
+
+            result = BusinessLogic.runTSP(Area, Customers);
+            LogResult(result);
+
             IsLoading = false;
         }
 

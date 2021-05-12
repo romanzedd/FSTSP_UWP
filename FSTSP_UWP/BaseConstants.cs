@@ -8,8 +8,8 @@ namespace FSTSP_UWP
         public static int DroneSpeed = 20; //meters per second
         public static int DropDeliveryTime = 120; // seconds required to drop delivery at customer
 
-        public const  int TruckSpeedConst = 14;
-        public static int TruckSpeed = 14;//meters per second
+        public const  int TruckSpeedConst = 10;
+        public static int TruckSpeed = 10;//meters per second
 
         public static int PolygonSize = 5; //in paper it says 5, but generation for 5 is taking way too long
         public static int areaHeight = 10;

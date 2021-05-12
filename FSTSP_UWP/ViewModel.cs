@@ -21,17 +21,70 @@ namespace FSTSP_UWP
 
         public int AreaSize = 0;
 
-        public async Task<string> runTSP(int areaSizeInput, int numberOfCustomers)
+        /// <summary>
+        /// Starts sequence to execute Travelling Salesman Problem algorithm with A* and a set of conditions
+        /// </summary>
+        /// <param name="areaSizeInput"></param>
+        /// <param name="numberOfCustomers"></param>
+        /// <returns></returns>
+        public string runTSP(int areaSizeInput, int numberOfCustomers)
         {
             var areaSize = areaSizeInput * 1000 / BaseConstants.PolygonSize; //sets size in nodes
             Depot = new Location(areaSize / 2, areaSize / 2, 0);
-            await generateSpace(areaSize, 1);
+            //await generateSpace(areaSize, 1);
             groundGrid = grid;
+
             generateOrders(areaSize, numberOfCustomers);
-            var result = doTruck(orders);
+
+            var truck = generateTruck("singleTruck1", 0, areaSize);
+
+            var result = string.Empty;
+            try
+            {
+                if (!Settings.DeliveryInterval)
+                {
+                    Order.sortOrders(ref orders, Depot);
+                    doTruck(Depot, orders, truck);
+                }
+                else
+                {
+                    var timeClusteredOrders = new List<List<Order>>();
+                    var intervals = new DeliveryIntervals();
+                    foreach (var interval in intervals.Intervals)
+                    {
+                        var ordersInInterval = orders.Where(x => x.dueTime.Equals(interval.Key)).ToList();
+                        timeClusteredOrders.Add(ordersInInterval);
+                    }
+
+                    for (int i = 0; i < timeClusteredOrders.Count(); i++)
+                    {
+
+                        if (truck.time < intervals.Intervals.ToArray()[i].Value.start)
+                            truck.time = intervals.Intervals.ToArray()[i].Value.start;
+
+                        var timedOrders = timeClusteredOrders.ElementAt(i);
+                        Order.sortOrders(ref timedOrders, truck.currentPosition);
+                        doTruck(truck.currentPosition, timedOrders, truck);
+                    }
+                }
+
+            }
+            catch(Exception ex)
+            {
+                return "Unhandled exception during path reconstruction\nPlease try again";
+            }
+
+            result = ComposeResult(truck);
+
             return result;
         }
 
+        /// <summary>
+        /// Starts sequence to execute Flying Sidekick Travelling Salesman Problem algorithm
+        /// </summary>
+        /// <param name="areaSizeInput"></param>
+        /// <param name="numberOfCustomers"></param>
+        /// <returns></returns>
         public string runFSTSP(int areaSizeInput, int numberOfCustomers)
         {
             var areaSize = areaSizeInput * 1000 / BaseConstants.PolygonSize; //sets size in nodes
@@ -247,30 +300,62 @@ namespace FSTSP_UWP
 
             return droneStatusUpdate(dronePaths);
         }
-        private string doTruck(List<Order> truckOrders)
+        private string doTruck(Location depot, List<Order> truckOrders, Truck truck)
         {
+            if (truckOrders is null) return string.Empty;
+            if (Settings.TrafficScore != 0)
+                adjustTruckSpeed();
+
             List<List<Location>> truckPaths = new List<List<Location>>();
             List<Location> path;
 
-            AStarSearch astar = new AStarSearch(groundGrid, Depot, new Location(truckOrders.First().x, truckOrders.First().y, 0));
-            path = astar.ReconstructPath(Depot, new Location(truckOrders.First().x, truckOrders.First().y, 0), astar.cameFrom);
+            AStarSearch astar = new AStarSearch(groundGrid, depot, new Location(truckOrders.First().x, truckOrders.First().y, 0));
+            path = astar.ReconstructPath(depot, new Location(truckOrders.First().x, truckOrders.First().y, 0), astar.cameFrom);
             truckPaths.Add(path);
+
+            truck.currentPosition = new Location(truckOrders.First().x, truckOrders.First().y, 0);
+            var pathLength = path.Count * BaseConstants.PolygonSize;
+            var deliveryTime = pathLength / BaseConstants.TruckSpeed + BaseConstants.DropDeliveryTime;
+            truck.time += deliveryTime;
+            truck.status = Status.OnMission;
+
+            truck.log.Add(new Log(truck.id,
+                  truck.currentPosition,
+                  orders.Where(x => (x.x == truck.currentPosition.x && x.y == truck.currentPosition.y)).First().address,
+                  truck.time,
+                  truck.status,
+                  "Delivery finished"));
 
             for (int i = 0; i < truckOrders.Count - 1; i++)
             {
+                if (Settings.TrafficScore != 0)
+                    adjustTruckSpeed(truck.time);
 
-                astar = new AStarSearch(groundGrid,
-                                        new Location(truckOrders[i].x, truckOrders[i].y, 0),
-                                        new Location(truckOrders[i + 1].x, truckOrders[i + 1].y, 0));
-                path = astar.ReconstructPath(new Location(truckOrders[i].x, truckOrders[i].y, 0),
-                                             new Location(truckOrders[i + 1].x, truckOrders[i + 1].y, 0),
-                                             astar.cameFrom);
+                var start = new Location(truckOrders[i].x, truckOrders[i].y, 0);
+                var deliveryLocation = new Location(truckOrders[i + 1].x, truckOrders[i + 1].y, 0);
+
+                astar = new AStarSearch(groundGrid, start, deliveryLocation);
+                path = astar.ReconstructPath(start, deliveryLocation, astar.cameFrom);
                 truckPaths.Add(path);
+
+                pathLength = path.Count * BaseConstants.PolygonSize;
+                deliveryTime = pathLength / BaseConstants.TruckSpeed + BaseConstants.DropDeliveryTime;
+
+                truck.currentPosition = deliveryLocation;
+                truck.time += deliveryTime;
+                truck.status = Status.OnMission;
+
+                truck.log.Add(new Log(truck.id,
+                      truck.currentPosition,
+                      orders.Where(x => (x.x == truck.currentPosition.x && x.y == truck.currentPosition.y)).First().address,
+                      truck.time,
+                      truck.status,
+                      "Delivery finished"));
             }
 
-            astar = new AStarSearch(groundGrid, new Location(truckOrders.Last().x, truckOrders.Last().y, 0), Depot);
-            path = astar.ReconstructPath(new Location(truckOrders.Last().x, truckOrders.Last().y, 0), Depot, astar.cameFrom);
-            truckPaths.Add(path);
+            //astar = new AStarSearch(groundGrid, new Location(truckOrders.Last().x, truckOrders.Last().y, 0), Depot);
+            //path = astar.ReconstructPath(new Location(truckOrders.Last().x, truckOrders.Last().y, 0), Depot, astar.cameFrom);
+            //truckPaths.Add(path);
 
             return truckStatusUpdate(truckPaths);
         }

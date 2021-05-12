@@ -11,7 +11,6 @@ namespace FSTSP_UWP
         public Location destination = new Location(-1, -1, -1);
         public int time = 28800;
         public List<Order> fulfilledOrders = new List<Order>();
-        //public string log = string.Empty;
         public List<Log> log = new List<Log>();
 
 
