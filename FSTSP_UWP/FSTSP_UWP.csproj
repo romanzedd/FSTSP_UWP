@@ -129,6 +129,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="BaseConstants.cs" />
+    <Compile Include="Routing\Astar2D.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="SettingsKeys.cs" />
     <Compile Include="FSTSPRouting.cs" />

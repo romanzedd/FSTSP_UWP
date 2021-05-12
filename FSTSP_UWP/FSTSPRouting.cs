@@ -13,7 +13,7 @@ namespace FSTSP_UWP
             {
                 if(Settings.TrafficScore == 0)
                 {
-                    ViewModel.adjustTruckSpeed(truck.time);
+                    Truck.adjustTruckSpeed(truck.time);
                 }
 
                 if (truck.status.Equals(Status.Ready))

@@ -99,7 +99,7 @@ namespace FSTSP_UWP.ViewModels
             var result = string.Empty;
             ResetLog();
 
-            result = await BusinessLogic.generateSpace(Area, 1);
+            result = await BusinessLogic.generateSpace(Area);
             LogResult(result);
 
             result = BusinessLogic.runTSP(Area, Customers);

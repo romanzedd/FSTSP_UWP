@@ -36,7 +36,7 @@ namespace FSTSP_UWP
 
             generateOrders(areaSize, numberOfCustomers);
 
-            var truck = generateTruck("singleTruck1", 0, areaSize);
+            var truck = Truck.generateTruck("singleTruck1", 0, areaSize, Depot);
 
             var result = string.Empty;
             try
@@ -101,7 +101,7 @@ namespace FSTSP_UWP
             }
 
             generateOrders(areaSize, numberOfCustomers);
-            var truck = generateTruck("truck1", 3, areaSize);
+            var truck = Truck.generateTruck("truck1", 3, areaSize, Depot);
             try
             {
                 performDelivery(truck);
@@ -116,6 +116,51 @@ namespace FSTSP_UWP
             return string.Concat(weatherConditions, output);
         }
 
+        public async Task<string> generateSpace(int areaSizeInput)
+        {
+            var areaSize = areaSizeInput * 1000 / BaseConstants.PolygonSize;
+            grid = new SquareGrid(areaSize, areaSize, BaseConstants.areaHeight);
+
+            await Task.Run(() =>
+            {
+                GridGeneration.fillGrid(grid, areaSize, BaseConstants.areaHeight);
+            });
+
+
+            groundGrid = new SquareGrid(areaSize, areaSize, 1);
+            groundGrid.walls = grid.walls.Where(location => location.z == 0).ToHashSet();
+
+            return $"Space of {areaSizeInput} km2 ({areaSize * areaSize * BaseConstants.areaHeight} polygons) generated successfully\n";
+        }
+
+        public async Task<string> generateSpace(int areaSizeInput, int areaHeight)
+        {
+            var areaSize = areaSizeInput * 1000 / BaseConstants.PolygonSize;
+            grid = new SquareGrid(areaSize, areaSize, areaHeight);
+            await Task.Run(() =>
+            {
+                GridGeneration.fillGrid(grid, areaSize, areaHeight);
+            });
+            return $"Space of {areaSizeInput} km2 ({areaSize * areaSize * areaHeight} polygons) generated successfully\n";
+        }
+
+        public static string generateOrders(int areaSize, int ordersCount)
+        {
+            if (ordersCount < 1)
+                ordersCount = 15;
+
+            if (Settings.DeliveryInterval)
+            {
+                orders = Order.generateOrders(grid, Depot, ordersCount, areaSize, true);
+            }
+            else
+            {
+                orders = Order.generateOrders(grid, Depot, ordersCount, areaSize);
+            }
+
+            return $"{ordersCount} orders generated successfully\n";
+        }
+
         /// <summary>
         /// Performs delivery depending on wether deliveries are scheduled or not, based on settings value
         /// </summary>
@@ -123,7 +168,7 @@ namespace FSTSP_UWP
         private void performDelivery(Truck truck)
         {
             if (Settings.TrafficScore != 0)
-                adjustTruckSpeed();
+                Truck.adjustTruckSpeed();
             
 
             if (!Settings.DeliveryInterval)
@@ -182,129 +227,11 @@ namespace FSTSP_UWP
             }
         }
 
-        private void adjustTruckSpeed()
-        {
-            double doubleSpeed = BaseConstants.TruckSpeedConst * (1 - ((double)Settings.TrafficScore / 20));
-            BaseConstants.TruckSpeed = (int)Math.Ceiling(doubleSpeed);
-        }
-
-        public static void adjustTruckSpeed(int currentTime)
-        {
-            var hour = TimeSpan.FromSeconds(currentTime).Hours;
-            var trafficScore = BaseConstants.trafficByTime.GetValueOrDefault(hour);
-
-            double doubleSpeed = BaseConstants.TruckSpeedConst * (1 - ((double)trafficScore / 20));
-            BaseConstants.TruckSpeed = (int)Math.Ceiling(doubleSpeed);
-        }
-
-        private string checkWeatherConditions()
-        {
-            var result = string.Empty;
-
-            if (Settings.Temperature <= -10 || Settings.Temperature >= 50)
-                result += "\n\tTemperature is out of operable range";
-            if (Settings.PrecipitationType.Equals("Showers") || Settings.PrecipitationType.Equals("Snowfall"))
-            {
-                if ((Settings.Temperature >= -5 && Settings.PrecipitationVolume >= 40) ||
-                    (Settings.Temperature <= -5 && Settings.PrecipitationVolume >= 60))
-                    result += "\n\tHeavy precipation probability";
-            }
-            else if (Settings.PrecipitationType.Equals("Hail"))
-                result += "\n\tHail";
-            if (Settings.Wind > 10)
-                result += "\n\tStrong wind";
-            if (Settings.GAIndex > 3)
-                result += "\n\tGeomagnetic activity index is high";
-
-            if (result != string.Empty)
-                result = string.Concat("\nDrone delivery is not possible due to next reasons:", result);
-
-            return result;
-        }
-
-        public async Task<string> generateSpace(int areaSizeInput)
-        {
-            var areaSize = areaSizeInput * 1000 / BaseConstants.PolygonSize;
-            grid = new SquareGrid(areaSize, areaSize, BaseConstants.areaHeight);
-
-            await Task.Run(() =>
-            {
-                GridGeneration.fillGrid(grid, areaSize, BaseConstants.areaHeight);
-            });
-
-
-            groundGrid = new SquareGrid(areaSize, areaSize, 1);
-            groundGrid.walls = grid.walls.Where(location => location.z == 0).ToHashSet();
-
-            return $"Space of {areaSizeInput} km2 ({areaSize * areaSize * BaseConstants.areaHeight} polygons) generated successfully\n";
-        }
-
-        public async Task<string> generateSpace(int areaSizeInput, int areaHeight)
-        {
-            var areaSize = areaSizeInput * 1000 / BaseConstants.PolygonSize;
-            grid = new SquareGrid(areaSize, areaSize, areaHeight);
-            await Task.Run(() =>
-            {
-                GridGeneration.fillGrid(grid, areaSize, areaHeight);
-            });
-            return $"Space of {areaSizeInput} km2 ({areaSize * areaSize * areaHeight} polygons) generated successfully\n";
-        }
-
-        public static string generateOrders(int areaSize, int ordersCount)
-        {
-            if (ordersCount < 1)
-                ordersCount = 15;
-
-            if (Settings.DeliveryInterval)
-            {
-                orders = Order.generateOrders(grid, Depot, ordersCount, areaSize, true);
-            }
-            else
-            {
-                orders = Order.generateOrders(grid, Depot, ordersCount, areaSize);
-            }
-
-            return $"{ordersCount} orders generated successfully\n";
-        }
-
-        public static Truck generateTruck(string truckID, int numberOfDrones, int areaSize)
-        {
-            var areaLength = areaSize * 1000;
-
-            var truck = new Truck(truckID, Depot, new List<Drone>());
-            for (int i = 0; i < numberOfDrones; i++)
-            {
-                var drone = new Drone(truckID + "_drone" + (i + 1).ToString(),
-                                      Convert.ToInt32(areaLength),
-                                      2500,
-                                      Depot);
-                truck.drones.Add(drone);
-            }
-
-            return truck;
-        }
-
-        private string doDrone(List<Order> droneOrders)
-        {
-            List<List<Location>> dronePaths = new List<List<Location>>();
-            foreach (var order in droneOrders)
-            {
-                List<Location> path = new List<Location>();
-                AStarSearch astar = new AStarSearch(grid, Depot, new Location(order.x, order.y, 0));
-                path = astar.ReconstructPath(Depot, new Location(order.x, order.y, 0), astar.cameFrom);
-                var returnPath = path;
-                returnPath.Reverse();
-                path.AddRange(returnPath);
-                dronePaths.Add(path);
-            }
-
-            return droneStatusUpdate(dronePaths);
-        }
         private string doTruck(Location depot, List<Order> truckOrders, Truck truck)
         {
             if (truckOrders is null) return string.Empty;
             if (Settings.TrafficScore != 0)
-                adjustTruckSpeed();
+                Truck.adjustTruckSpeed();
 
             List<List<Location>> truckPaths = new List<List<Location>>();
             List<Location> path;
@@ -329,7 +256,7 @@ namespace FSTSP_UWP
             for (int i = 0; i < truckOrders.Count - 1; i++)
             {
                 if (Settings.TrafficScore != 0)
-                    adjustTruckSpeed(truck.time);
+                    Truck.adjustTruckSpeed(truck.time);
 
                 var start = new Location(truckOrders[i].x, truckOrders[i].y, 0);
                 var deliveryLocation = new Location(truckOrders[i + 1].x, truckOrders[i + 1].y, 0);
@@ -357,60 +284,49 @@ namespace FSTSP_UWP
             //path = astar.ReconstructPath(new Location(truckOrders.Last().x, truckOrders.Last().y, 0), Depot, astar.cameFrom);
             //truckPaths.Add(path);
 
-            return truckStatusUpdate(truckPaths);
+            return Truck.truckStatusUpdate(truckPaths, TruckTime);
         }
 
-        private string droneStatusUpdate(List<List<Location>> dronePaths)
+        private string doDrone(List<Order> droneOrders)
         {
-            var output = string.Empty;
-            foreach (var path in dronePaths)
+            List<List<Location>> dronePaths = new List<List<Location>>();
+            foreach (var order in droneOrders)
             {
-                var currentTime = TimeSpan.FromSeconds(DroneTime);
-                output += $"[{currentTime.ToString(@"hh\:mm\:ss\:fff")}] Drone picked parcel and left the depot\n";
-
-                DroneTime += (path.Count / 2) * BaseConstants.PolygonSize / BaseConstants.DroneSpeed;
-                currentTime = TimeSpan.FromSeconds(DroneTime);
-                output += $"[{currentTime.ToString(@"hh\:mm\:ss\:fff")}] Drone arrived to a client\n";
-
-                DroneTime += BaseConstants.DropDeliveryTime;
-                currentTime = TimeSpan.FromSeconds(DroneTime);
-                output += $"[{currentTime.ToString(@"hh\:mm\:ss\:fff")}] Drone dropped parcel and is returning to the depot\n";
-
-                DroneTime += (path.Count / 2) * BaseConstants.PolygonSize / BaseConstants.DroneSpeed;
-                currentTime = TimeSpan.FromSeconds(DroneTime);
-                output += $"[{currentTime.ToString(@"hh\:mm\:ss\:fff")}] Drone arrived to the depot\n";
-
-                DroneTime += BaseConstants.DropDeliveryTime;
+                List<Location> path = new List<Location>();
+                AStarSearch astar = new AStarSearch(grid, Depot, new Location(order.x, order.y, 0));
+                path = astar.ReconstructPath(Depot, new Location(order.x, order.y, 0), astar.cameFrom);
+                var returnPath = path;
+                returnPath.Reverse();
+                path.AddRange(returnPath);
+                dronePaths.Add(path);
             }
 
-            return output;
+            return Drone.droneStatusUpdate(dronePaths, DroneTime);
         }
 
-        private string truckStatusUpdate(List<List<Location>> truckPaths)
+        private string checkWeatherConditions()
         {
-            var output = string.Empty;
-            var currentTime = TimeSpan.FromSeconds(TruckTime);
-            output += $"[{currentTime.ToString(@"hh\:mm\:ss\:fff")}] Truck picked parcels and left the depot\n";
+            var result = string.Empty;
 
-            foreach (var path in truckPaths)
+            if (Settings.Temperature <= -10 || Settings.Temperature >= 50)
+                result += "\n\tTemperature is out of operable range";
+            if (Settings.PrecipitationType.Equals("Showers") || Settings.PrecipitationType.Equals("Snowfall"))
             {
-                if (path == truckPaths.Last())
-                {
-                    TruckTime += path.Count * BaseConstants.PolygonSize / BaseConstants.TruckSpeed;
-                    currentTime = TimeSpan.FromSeconds(TruckTime);
-                    output += $"[{currentTime.ToString(@"hh\:mm\:ss\:fff")}] Truck arrived to the depot\n";
-                    continue;
-                }
-
-                TruckTime += path.Count * BaseConstants.PolygonSize / BaseConstants.TruckSpeed;
-                currentTime = TimeSpan.FromSeconds(TruckTime);
-                output += $"[{currentTime.ToString(@"hh\:mm\:ss\:fff")}] Truck arrived to a client\n";
-
-                TruckTime += BaseConstants.DropDeliveryTime;
-                currentTime = TimeSpan.FromSeconds(TruckTime);
-                output += $"[{currentTime.ToString(@"hh\:mm\:ss\:fff")}] Truck dropped parcel and is heading to the next client\n";
+                if ((Settings.Temperature >= -5 && Settings.PrecipitationVolume >= 40) ||
+                    (Settings.Temperature <= -5 && Settings.PrecipitationVolume >= 60))
+                    result += "\n\tHeavy precipation probability";
             }
-            return output;
+            else if (Settings.PrecipitationType.Equals("Hail"))
+                result += "\n\tHail";
+            if (Settings.Wind > 10)
+                result += "\n\tStrong wind";
+            if (Settings.GAIndex > 3)
+                result += "\n\tGeomagnetic activity index is high";
+
+            if (result != string.Empty)
+                result = string.Concat("\nDrone delivery is not possible due to next reasons:", result);
+
+            return result;
         }
 
         private string ComposeResult(Truck truck)

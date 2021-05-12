@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace FSTSP_UWP
@@ -71,6 +72,32 @@ namespace FSTSP_UWP
 
 
 
+        }
+
+        public static string droneStatusUpdate(List<List<Location>> dronePaths, int DroneTime)
+        {
+            var output = string.Empty;
+            foreach (var path in dronePaths)
+            {
+                var currentTime = TimeSpan.FromSeconds(DroneTime);
+                output += $"[{currentTime.ToString(@"hh\:mm\:ss\:fff")}] Drone picked parcel and left the depot\n";
+
+                DroneTime += (path.Count / 2) * BaseConstants.PolygonSize / BaseConstants.DroneSpeed;
+                currentTime = TimeSpan.FromSeconds(DroneTime);
+                output += $"[{currentTime.ToString(@"hh\:mm\:ss\:fff")}] Drone arrived to a client\n";
+
+                DroneTime += BaseConstants.DropDeliveryTime;
+                currentTime = TimeSpan.FromSeconds(DroneTime);
+                output += $"[{currentTime.ToString(@"hh\:mm\:ss\:fff")}] Drone dropped parcel and is returning to the depot\n";
+
+                DroneTime += (path.Count / 2) * BaseConstants.PolygonSize / BaseConstants.DroneSpeed;
+                currentTime = TimeSpan.FromSeconds(DroneTime);
+                output += $"[{currentTime.ToString(@"hh\:mm\:ss\:fff")}] Drone arrived to the depot\n";
+
+                DroneTime += BaseConstants.DropDeliveryTime;
+            }
+
+            return output;
         }
     }
 }
