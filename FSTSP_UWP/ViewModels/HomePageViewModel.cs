@@ -102,11 +102,26 @@ namespace FSTSP_UWP.ViewModels
             result = await BusinessLogic.generateSpace(Area);
             LogResult(result);
 
-            result = BusinessLogic.runTSP(Area, Customers);
+            result = BusinessLogic.runFSTSPnoDrones(Area, Customers);
             LogResult(result);
 
             IsLoading = false;
         }
+        //private async Task OnRunTsp()
+        //{
+        //    IsLoading = true;
+
+        //    var result = string.Empty;
+        //    ResetLog();
+
+        //    result = await BusinessLogic.generateSpace(Area);
+        //    LogResult(result);
+
+        //    result = BusinessLogic.runTSP(Area, Customers);
+        //    LogResult(result);
+
+        //    IsLoading = false;
+        //}
 
         private bool OnCanRun()
         {

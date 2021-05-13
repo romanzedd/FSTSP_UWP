@@ -48,7 +48,7 @@ namespace FSTSP_UWP
 
             var path = simpleRoute(grid, start, deliveryLocation);
             var pathLength = path.Count * BaseConstants.PolygonSize;
-            var deliveryTime = pathLength / BaseConstants.TruckSpeed + BaseConstants.DropDeliveryTime;
+            var deliveryTime = pathLength / BaseConstants.TruckSpeed + BaseConstants.TruckDropDeliveryTime;
 
             truck.time += deliveryTime;
             truck.status = Status.Ready;

@@ -116,9 +116,44 @@ namespace FSTSP_UWP
             return string.Concat(weatherConditions, output);
         }
 
+        public string runFSTSPnoDrones(int areaSizeInput, int numberOfCustomers)
+        {
+            var areaSize = areaSizeInput * 1000 / BaseConstants.PolygonSize; //sets size in nodes
+            Depot = new Location(areaSize / 2, areaSize / 2, 0);
+
+            var weatherConditions = checkWeatherConditions();
+            if (weatherConditions == string.Empty)
+            {
+                weatherConditions = "\nWeather conditions OK";
+            }
+            else
+            {
+                return weatherConditions;
+            }
+
+            generateOrders(areaSize, numberOfCustomers);
+            var truck = Truck.generateTruck("truck1single", 0, areaSize, Depot);
+            try
+            {
+                performDelivery(truck);
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+                return "Unhandled exception during path reconstruction\nPlease try again";
+            };
+
+            var output = ComposeResult(truck);
+
+            return string.Concat(weatherConditions, output);
+        }
+
         public async Task<string> generateSpace(int areaSizeInput)
         {
             var areaSize = areaSizeInput * 1000 / BaseConstants.PolygonSize;
+
+            if (grid != null && grid.length == areaSize) return $"Space of {areaSizeInput} km2 was already generated\n";
+
             grid = new SquareGrid(areaSize, areaSize, BaseConstants.areaHeight);
 
             await Task.Run(() =>
@@ -146,6 +181,8 @@ namespace FSTSP_UWP
 
         public static string generateOrders(int areaSize, int ordersCount)
         {
+            if (orders != null && orders.Count() == ordersCount) return $"\n{ordersCount} is already generated, to generate new orders, change number of customers";
+
             if (ordersCount < 1)
                 ordersCount = 15;
 
