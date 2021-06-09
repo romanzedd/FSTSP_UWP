@@ -4,7 +4,20 @@ namespace FSTSP_UWP
 {
     public class BaseConstants
     {
-        public static int DroneRange = 7; // kilometers
+        //to control experiment parameters
+        public static double LightweightOrdersPercentile = 0.3;
+        enum OrdersLocations
+        {
+            center,
+            corner,
+            peripheral,
+            random
+        };
+
+        public static string OrdersLocation = OrdersLocations.random.ToString();
+        //________________________________
+
+        public static int DroneRange = 7000; // kilometers
         //public static int DroneSpeed = 20; //meters per second
         public static int DroneSpeed = 800;
         public static int DropDeliveryTime = 120; // seconds required to drop delivery at customer

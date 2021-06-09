@@ -24,8 +24,6 @@ namespace FSTSP_UWP
         /// <summary>
         /// Starts sequence to execute Travelling Salesman Problem algorithm with A* and a set of conditions
         /// </summary>
-        /// <param name="areaSizeInput"></param>
-        /// <param name="numberOfCustomers"></param>
         /// <returns></returns>
         public string runTSP(int areaSizeInput, int numberOfCustomers)
         {
@@ -78,6 +76,7 @@ namespace FSTSP_UWP
 
             return result;
         }
+        
 
         /// <summary>
         /// Starts sequence to execute Flying Sidekick Travelling Salesman Problem algorithm
@@ -102,14 +101,16 @@ namespace FSTSP_UWP
 
             generateOrders(areaSize, numberOfCustomers);
             var truck = Truck.generateTruck("truck1", 3, areaSize, Depot);
-            try
-            {
-                performDelivery(truck);
-            }
-            catch (Exception ex) 
-            {
-                return "Unhandled exception during path reconstruction\nPlease try again";
-            };
+
+            performDelivery(truck);
+            //try
+            //{
+            //    performDelivery(truck);
+            //}
+            //catch (Exception ex) 
+            //{
+            //    return "Unhandled exception during path reconstruction\nPlease try again";
+            //};
 
             var output = ComposeResult(truck);
 
@@ -133,15 +134,17 @@ namespace FSTSP_UWP
 
             generateOrders(areaSize, numberOfCustomers);
             var truck = Truck.generateTruck("truck1single", 0, areaSize, Depot);
-            try
-            {
-                performDelivery(truck);
-            }
-            catch (Exception ex)
-            {
-                return ex.Message;
-                return "Unhandled exception during path reconstruction\nPlease try again";
-            };
+
+            performDelivery(truck);
+            //try
+            //{
+            //    performDelivery(truck);
+            //}
+            //catch (Exception ex)
+            //{
+            //    return ex.Message;
+            //    return "Unhandled exception during path reconstruction\nPlease try again";
+            //};
 
             var output = ComposeResult(truck);
 

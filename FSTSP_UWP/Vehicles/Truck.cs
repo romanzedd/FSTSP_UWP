@@ -27,7 +27,7 @@ namespace FSTSP_UWP
             for (int i = 0; i < numberOfDrones; i++)
             {
                 var drone = new Drone(truckID + "_drone" + (i + 1).ToString(),
-                                      Convert.ToInt32(areaLength),
+                                      BaseConstants.DroneRange,
                                       2500,
                                       Depot);
                 truck.drones.Add(drone);

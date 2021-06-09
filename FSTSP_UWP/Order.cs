@@ -76,25 +76,64 @@ namespace FSTSP_UWP
 
         public static List<Order> generateOrders(SquareGrid grid, Location Depot, int ordersCount, int areaSize, bool intervals = false)
         {
+            var weight = 1000;
+            //var lightweightOrdersCount = Math.Ceiling(ordersCount * (1 - BaseConstants.LightweightOrdersPercentile));
+            var heavyweightOrdersCount = Math.Ceiling(ordersCount * (1 - ((double)Settings.PrecipitationVolume / 10)));
             Random rnd = new Random();
             List<Order> ordersList = new List<Order>();
             while (ordersCount > 0)
             {
-                var x = rnd.Next(areaSize);
-                var y = rnd.Next(areaSize);
+                int x, y;
+                void generateLocation()
+                {
+                    switch (BaseConstants.OrdersLocation)
+                    {
+                        case "center":
+                            x = rnd.Next(areaSize / 4, areaSize * 3 / 4);
+                            y = rnd.Next(areaSize / 4, areaSize * 3 / 4);
+                            break;
+                        case "corner":
+                            x = rnd.Next(0, areaSize / 4);
+                            y = rnd.Next(0, areaSize / 4);
+                            break;
+                        case "peripheral":
+                            x = rnd.Next(areaSize);
+                            if (x > areaSize / 4 && x < areaSize / 2)
+                                x -= areaSize / 4;
+                            if (x > areaSize / 2 && x < areaSize * 3 / 4)
+                                x += areaSize / 4;
+
+                            y = rnd.Next(areaSize);
+                            if (y > areaSize / 4 && y < areaSize / 2)
+                                y -= areaSize / 4;
+                            if (y > areaSize / 2 && y < areaSize * 3 / 4)
+                                y += areaSize / 4;
+                            break;
+                        default:
+                            x = rnd.Next(areaSize);
+                            y = rnd.Next(areaSize);
+                            break;
+                    }
+                }
+                generateLocation();
+
                 var isWall = true;
                 while (isWall)
                 {
                     if (grid.walls.Contains(new Location(x, y, 0)))
                     {
-                        x = rnd.Next(areaSize);
-                        y = rnd.Next(areaSize);
+                        generateLocation();
+                        //x = rnd.Next(areaSize);
+                        //y = rnd.Next(areaSize);
                     }
                     else
                         isWall = false;
                 }
 
-                ordersList.Add(new Order(x, y, rnd.Next(100, 6000), rnd.Next(1, 4)));
+                if (ordersCount < heavyweightOrdersCount) weight = 10000;
+
+                //ordersList.Add(new Order(x, y, rnd.Next(100, 6000), rnd.Next(1, 4)));
+                ordersList.Add(new Order(x, y, weight, rnd.Next(1, 4)));
                 ordersCount--;
             }
             return ordersList;

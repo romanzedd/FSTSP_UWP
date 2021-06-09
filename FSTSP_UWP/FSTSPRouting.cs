@@ -40,7 +40,8 @@ namespace FSTSP_UWP
                         Vehicle.compareAndUpdateTime(awaitingDrones, truck);
                         Drone.retrieveDrones(truck, awaitingDrones);
 
-                        Truck.doTruckDelivery(grid, truck, truckRoute[i], truckRoute[i + 1]);
+                        Truck.doTruckDelivery(ViewModel.groundGrid, truck, truckRoute[i], truckRoute[i + 1]);
+                        //Truck.doTruckDelivery(grid, truck, truckRoute[i], truckRoute[i + 1]);
                         var deliveredOrder = orders.Find(order => order.x == truckRoute[i + 1].x && order.y == truckRoute[i + 1].y);
                         orders.Remove(deliveredOrder);
 
